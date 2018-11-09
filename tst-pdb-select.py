@@ -25,9 +25,8 @@ def only_protein(pdb_hierarchy):
       for rg in chain.residue_groups():
         for ag in rg.atom_groups():
           if get_class(ag.resname) == "common_rna_dna":
-            return True
+            return True 
   return False
-
 
 def box_pdb(pdb_inp,filename):
   model = mmtbx.model.manager(model_input = pdb_inp)
@@ -36,13 +35,13 @@ def box_pdb(pdb_inp,filename):
     buffer_layer=10)
   model.set_sites_cart(box.sites_cart)
   model._crystal_symmetry = box.crystal_symmetry()
-  print  model.model_as_pdb()
-  box_file=open(filename[3:7]+"_box.pdb",'w')
+  print  model.model_as_pdb()  
+  box_file=open(filename[:4]+"_box.pdb",'w')
   box_file.write(model.model_as_pdb())
   box_file.close()
 
 def remove_rna_dna(pdb_hierarchy):
-  get_class = iotbx.pdb.common_residue_names_get_class
+  get_class = iotbx.pdb.common_residue_names_get_class 
   asc = pdb_hierarchy.atom_selection_cache()
   for model in pdb_hierarchy.models():
     for chain in model.chains():
@@ -50,7 +49,7 @@ def remove_rna_dna(pdb_hierarchy):
         for ag in rg.atom_groups():
           if get_class(ag.resname) == "common_rna_dna":
             print ag.resname
-            sel = asc.selection("resname "+ag.resname) 
+            sel = asc.selection("resname "+ag.resname)  
             hierarchy_new = pdb_hierarchy.select(sel)
   return hierarchy_new
 
@@ -63,11 +62,12 @@ def clusters(pdb_hierarchy):
                 os.path.join(qrefine,"plugin","yoink","dat"),
                 "cluster.xml")
   interaction_list,weight = pyoink.get_interactions_list()
-  cc=clustering.betweenness_centrality_clustering(
-                            interaction_list,
-                            maxnum_residues_in_cluster=3)
+  for e in interaction_list:
+    e.sort()
+  interaction_list.sort()
+  cc=clustering.betweenness_centrality_clustering(interaction_list,maxnum_residues_in_cluster=3)
   print cc.get_clusters()
-  return  cc.get_clusters()
+  return  cc.get_clusters()  
   
 def run(file_name):
   pdb_inp = iotbx.pdb.input(file_name = file_name)
@@ -75,33 +75,15 @@ def run(file_name):
   resolution = get_resolution(pdb_inp = pdb_inp)
   data_type = pdb_inp.get_experiment_type()
   filename=os.path.basename(file_name)
-  if resolution < 0.9: ##set < 0.9 
+  print filename
+  if resolution > 0.9: 
+    print resolution
     if data_type=="X-RAY DIFFRACTION" or  data_type=="NEUTRON DIFFRACTION":
       print data_type
-      if only_protein(pdb_hierarchy=pdb_hierarchy):
+      if only_protein(pdb_hierarchy=pdb_hierarchy): 
         print "PDB file not only protein"
         pdb_hierarchy = remove_rna_dna(pdb_hierarchy=pdb_hierarchy)
-      box_pdb(pdb_inp=pdb_inp,filename=filename)
-      clusters(pdb_hierarchy=pdb_hierarchy)
-
+        #print box_pdb(pdb_inp=pdb_inp,filename=filename)
+  #clusters(pdb_hierarchy=pdb_hierarchy)
 if __name__ == '__main__':
-  path = "/home/yanting/pdb/pdb/"
-  dpath = "/home/yanting/pdb/structure_factors/"
-  of = open("".join([path,"INDEX"]),"r")
-  files = ["".join([path,f]).strip() for f in of.readlines()]
-  of.close()
-#PDB reflection data files (list of corresponding codes)
-  of = open("".join([dpath,"INDEX"]),"r")
-  dfiles = [
-    os.path.basename("".join([path,f]).strip())[1:5] for f in of.readlines()]
-  of.close()
-  for f in files:
-    pdb_code = os.path.basename(f)[3:7]
-    if(pdb_code in dfiles):
-      #try:
-      run(file_name = f)
-     # except KeyboardInterrupt:raise
-     # except Exception,e:
-     #   print "FAILED:",f
-     #   print str(e)
-     #   print "-"*79
+  result = run(file_name = "/home/yanting/QR/ANI/6AI6.pdb")
