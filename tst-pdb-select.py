@@ -49,7 +49,7 @@ def remove_rna_dna(pdb_hierarchy):
         for ag in rg.atom_groups():
           if get_class(ag.resname) == "common_rna_dna":
             print ag.resname
-            sel = asc.selection("resname "+ag.resname)  
+            sel = asc.selection("not resname "+ag.resname)  
             hierarchy_new = pdb_hierarchy.select(sel)
   return hierarchy_new
 
@@ -84,6 +84,7 @@ def run(file_name):
         print "PDB file not only protein"
         pdb_hierarchy = remove_rna_dna(pdb_hierarchy=pdb_hierarchy)
         #print box_pdb(pdb_inp=pdb_inp,filename=filename)
-  #clusters(pdb_hierarchy=pdb_hierarchy)
+  clusters(pdb_hierarchy=pdb_hierarchy)
+  pdb_hierarchy.write_pdb_file(file_name="new_pdb.pdb")
 if __name__ == '__main__':
   result = run(file_name = "/home/yanting/QR/ANI/6AI6.pdb")

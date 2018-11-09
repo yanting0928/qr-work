@@ -50,7 +50,7 @@ def remove_rna_dna(pdb_hierarchy):
         for ag in rg.atom_groups():
           if get_class(ag.resname) == "common_rna_dna":
             print ag.resname
-            sel = asc.selection("resname "+ag.resname) 
+            sel = asc.selection("not resname "+ag.resname) 
             hierarchy_new = pdb_hierarchy.select(sel)
   return hierarchy_new
 
