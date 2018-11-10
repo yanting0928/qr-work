@@ -11,10 +11,10 @@ for model in pdb_hierarchy.models():
     for rg in chain.residue_groups():
       for ag in rg.atom_groups():
         if get_class(ag.resname) == "common_rna_dna":
-          not_protein_resseq.append(rg.resseq.strip())
+          not_protein_resseq.append(ag.resname.strip())
 print not_protein_resseq
 #selection=" not resseq 1  and not  resseq 2 and not  resseq 3"
-selection=" and ".join("not resseq %s"%i for i in not_protein_resseq)
+selection=" and ".join("not resname %s"%i for i in not_protein_resseq)
 print selection
 sel = asc.selection(selection)
 print 1

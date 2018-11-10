@@ -43,16 +43,14 @@ def box_pdb(pdb_inp,filename):
 
 def remove_rna_dna(pdb_hierarchy):
   get_class = iotbx.pdb.common_residue_names_get_class
-  asc = pdb_hierarchy.atom_selection_cache()
+  not_protein_resname=[]
   for model in pdb_hierarchy.models():
     for chain in model.chains():
       for rg in chain.residue_groups():
         for ag in rg.atom_groups():
           if get_class(ag.resname) == "common_rna_dna":
-            print ag.resname
-            sel = asc.selection("not resname "+ag.resname) 
-            hierarchy_new = pdb_hierarchy.select(sel)
-  return hierarchy_new
+            not_protein_resname.append(ag.resname.strip())
+  return not_protein_resname
 
 def clusters(pdb_hierarchy):
   yoink_utils.write_yoink_infiles("cluster.xml",
@@ -75,12 +73,17 @@ def run(file_name):
   resolution = get_resolution(pdb_inp = pdb_inp)
   data_type = pdb_inp.get_experiment_type()
   filename=os.path.basename(file_name)
+  asc = pdb_hierarchy.atom_selection_cache()
   if resolution < 0.9: ##set < 0.9 
     if data_type=="X-RAY DIFFRACTION" or  data_type=="NEUTRON DIFFRACTION":
       print data_type
       if only_protein(pdb_hierarchy=pdb_hierarchy):
         print "PDB file not only protein"
-        pdb_hierarchy = remove_rna_dna(pdb_hierarchy=pdb_hierarchy)
+        not_protein_resname = remove_rna_dna(pdb_hierarchy=pdb_hierarchy)
+        selection=" and ".join("not resname %s"%i for i in not_protein_resname)
+        print selection
+        sel = asc.selection(selection)
+        hierarchy_new = pdb_hierarchy.select(sel)
       box_pdb(pdb_inp=pdb_inp,filename=filename)
       clusters(pdb_hierarchy=pdb_hierarchy)
 
