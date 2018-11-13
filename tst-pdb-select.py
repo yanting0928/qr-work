@@ -7,6 +7,9 @@ import libtbx
 import qrefine.clustering as clustering
 from qrefine.utils import yoink_utils
 from qrefine.plugin.yoink.pyoink import PYoink
+from qrefine.fragment import fragments
+from qrefine.fragment import fragment_extracts
+from qrefine.fragment import get_qm_file_name_and_pdb_hierarchy
 
 qrefine = libtbx.env.find_in_repositories("qrefine")
 
@@ -18,7 +21,7 @@ def get_resolution(pdb_inp):
     resolution = resolutions[0]
   return resolution
 
-def only_protein(pdb_hierarchy):
+def not_only_protein(pdb_hierarchy):
   get_class = iotbx.pdb.common_residue_names_get_class
   for model in pdb_hierarchy.models():
     for chain in model.chains():
@@ -28,17 +31,25 @@ def only_protein(pdb_hierarchy):
             return True 
   return False
 
+def have_conformers(pdb_hierarchy):
+  for model in pdb_hierarchy.models():
+    for chain in model.chains():
+      for residue_group in chain.residue_groups():
+        if residue_group.have_conformers():
+          return True
+  return False
+
 def box_pdb(pdb_inp,filename):
   model = mmtbx.model.manager(model_input = pdb_inp)
   box = uctbx.non_crystallographic_unit_cell_with_the_sites_in_its_center(
     sites_cart=model.get_sites_cart(),
     buffer_layer=10)
   model.set_sites_cart(box.sites_cart)
-  model._crystal_symmetry = box.crystal_symmetry()
-  print  model.model_as_pdb()  
+  cs  = box.crystal_symmetry()
   box_file=open(filename[:4]+"_box.pdb",'w')
   box_file.write(model.model_as_pdb())
   box_file.close()
+  return cs
 
 def remove_rna_dna(pdb_hierarchy):
   get_class = iotbx.pdb.common_residue_names_get_class
@@ -66,7 +77,8 @@ def clusters(pdb_hierarchy):
   cc=clustering.betweenness_centrality_clustering(interaction_list,maxnum_residues_in_cluster=3)
   print cc.get_clusters()
   return  cc.get_clusters()  
-  
+ 
+ 
 def run(file_name):
   pdb_inp = iotbx.pdb.input(file_name = file_name)
   pdb_hierarchy = pdb_inp.construct_hierarchy()
@@ -78,16 +90,30 @@ def run(file_name):
     print resolution
     if data_type=="X-RAY DIFFRACTION" or  data_type=="NEUTRON DIFFRACTION":
       print data_type
-      if only_protein(pdb_hierarchy=pdb_hierarchy): 
+      if not_only_protein(pdb_hierarchy=pdb_hierarchy): 
         print "PDB file not only protein"
         not_protein_resname = remove_rna_dna(pdb_hierarchy=pdb_hierarchy)
         selection=" and ".join("not resname %s"%i for i in not_protein_resname)
         print selection
         sel = asc.selection(selection)
-        hierarchy_new = pdb_hierarchy.select(sel)
-        hierarchy_new.write_pdb_file(file_name="new_pdb.pdb")
-        #print box_pdb(pdb_inp=pdb_inp,filename=filename)
+        pdb_hierarchy = pdb_hierarchy.select(sel)
+  #    pdb_hierarchy.write_pdb_file(file_name="new_pdb.pdb")
+      if have_conformers(pdb_hierarchy=pdb_hierarchy):
+        pdb_hierarchy.remove_alt_confs(always_keep_one_conformer=True)
+      pdb_hierarchy.write_pdb_file(file_name = filename[:3]+"_new.pdb")
+      pdb_inp = iotbx.pdb.input(file_name = filename[:3]+"_new.pdb")
+      cs = box_pdb(pdb_inp=pdb_inp,filename=filename)
+      fq = fragments(pdb_hierarchy=pdb_hierarchy,
+                     maxnum_residues_in_cluster=5,
+                     debug=True,
+                     crystal_symmetry=cs)
+      print fq.clusters
+      fq_ext = fragment_extracts(fq)
+      for i in xrange(len(fq.clusters)):
+        get_qm_file_name_and_pdb_hierarchy(
+                          fragment_extracts=fq_ext,
+                          index=i)
   #clusters(pdb_hierarchy=pdb_hierarchy_new)
   #pdb_hierarchy_new.write_pdb_file(file_name="new_pdb.pdb")
 if __name__ == '__main__':
-  result = run(file_name = "/home/yanting/QR/ANI/6AI6.pdb")
+  result = run(file_name = "/home/yanting/QR/ANI/qr-work/1bdw.pdb")

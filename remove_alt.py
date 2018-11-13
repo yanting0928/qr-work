@@ -1,17 +1,20 @@
 import os
 import iotbx.pdb
+from cctbx.array_family import flex
 
-pdb_inp = iotbx.pdb.input(file_name = "1bdw.pdb")
-ph = pdb_inp.construct_hierarchy()
-for rg in ph.residue_groups():
-  #n_confs = len(rg.conformers())
-  #if (n_confs > 1):
-  ###  Is  contain conformers  ###
-  if rg.have_conformers():
-    conformer_container=[]
-    for atom_group in rg.atom_groups():
-      if (atom_group.occupancy() < 1):
-        conformer_container.append(atom_group)
-        print atom_group.occupancy() 
-        print atom_group.resname
-        print atom_group.confid()
+def have_conformers(ph):
+  for model in ph.models():
+    for chain in model.chains():
+      for residue_group in chain.residue_groups():
+        if residue_group.have_conformers():
+          return True
+  return False
+
+if __name__ == "__main__":
+  pdb_inp = iotbx.pdb.input(file_name = "1yjp.pdb")
+  ph = pdb_inp.construct_hierarchy()
+  if have_conformers(ph=ph):
+    ph.remove_alt_confs(always_keep_one_conformer=True) 
+    ph.write_pdb_file(file_name="tst.pdb")
+  else:
+    print "no"
