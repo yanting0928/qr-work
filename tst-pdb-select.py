@@ -5,14 +5,17 @@ from iotbx.pdb import remark_2_interpretation
 import mmtbx.model
 from cctbx import uctbx
 import libtbx
+from mmtbx.building import extend_sidechains
+from mmtbx.monomer_library import server
 import qrefine.clustering as clustering
 from qrefine.utils import yoink_utils
 from qrefine.plugin.yoink.pyoink import PYoink
 from qrefine.fragment import fragments
-from qrefine.fragment import fragment_extracts
-from qrefine.fragment import get_qm_file_name_and_pdb_hierarchy
+import qrefine.completion as completion
+
 
 qrefine = libtbx.env.find_in_repositories("qrefine")
+mon_lib_server = server.server()
 
 def get_resolution(pdb_inp):
   resolution = None
@@ -85,9 +88,34 @@ def clusters(pdb_hierarchy):
   print cc.get_clusters()
   return  cc.get_clusters()  
  
- 
+def complete_missing_atom(pdb_hierarchy,mon_lib_server):
+  n_changed = extend_sidechains.extend_protein_model(
+        pdb_hierarchy = pdb_hierarchy,
+        mon_lib_srv = mon_lib_server,
+        add_hydrogens=False,
+        )
+  return n_changed,pdb_hierarchy 
+
+def add_hydrogens_using_ReadySet(pdb_hierarchy):
+  from elbow.command_line.ready_set import run_though_all_the_options
+#  pdb_lines = open(pdb_filename, 'rb').read()
+  pdb_lines = pdb_hierarchy.as_pdb_string()
+  output_file_name =  "reduce.pdb"
+  rc = run_though_all_the_options(
+    pdb_lines,
+    [], # args
+    hydrogens=True,
+    reduce_args=['-BUILD'],
+    ligands=False,
+    add_h_to_water=True,
+    metals=False,
+    output_file_name=output_file_name+".pdb", 
+    )
+  return rc['model_hierarchy']  
+
 def run(file_name):
   filename=os.path.basename(file_name)[:4]
+  print filename
   pdb_inp = iotbx.pdb.input(file_name = file_name)
   resolution = get_resolution(pdb_inp = pdb_inp)
   data_type = pdb_inp.get_experiment_type()
@@ -95,32 +123,35 @@ def run(file_name):
     print resolution
     if data_type=="X-RAY DIFFRACTION" or  data_type=="NEUTRON DIFFRACTION":
       print data_type
-      easy_run.go("phenix.reduce %s > %s" %(file_name,filename+"_reduce.pdb"))
-      file_name = filename+"_reduce"
-      pdb_inp = iotbx.pdb.input(file_name = file_name+".pdb")
       pdb_hierarchy = pdb_inp.construct_hierarchy()
+      n_changed,pdb_hierarchy = complete_missing_atom(pdb_hierarchy = pdb_hierarchy,mon_lib_server = mon_lib_server)
+      if n_changed:
+        pdb_hierarchy.write_pdb_file(file_name = filename+"_complete.pdb")
+        file_name = filename+"_complete"
       if not_only_protein(pdb_hierarchy=pdb_hierarchy): 
         print "PDB file not only protein"
         pdb_hierarchy  = remove_rna_dna(pdb_hierarchy=pdb_hierarchy)
+      pdb_hierarchy = add_hydrogens_using_ReadySet(pdb_hierarchy=pdb_hierarchy)
       if have_conformers(pdb_hierarchy=pdb_hierarchy):
         pdb_hierarchy.remove_alt_confs(always_keep_one_conformer=True)
       file_name = file_name+"_update"
       pdb_hierarchy.write_pdb_file(file_name = file_name+".pdb")
       pdb_inp = iotbx.pdb.input(file_name = file_name+".pdb")
-      cs = box_pdb(pdb_inp=pdb_inp,filename=file_name)
+      cs = box_pdb(pdb_inp = pdb_inp,filename=file_name)
       fq = fragments(pdb_hierarchy= iotbx.pdb.input(file_name = file_name+"_box.pdb").construct_hierarchy(),
-                     working_folder = filename,
                      maxnum_residues_in_cluster=5,
                      debug=True,
                      crystal_symmetry=cs)
       print fq.clusters
-      fq_ext = fragment_extracts(fq)
-      for i in xrange(len(fq.clusters)):
-        get_qm_file_name_and_pdb_hierarchy(
-                          fragment_extracts=fq_ext,
-                          index=i)
-      libtbx.easy_run.fully_buffered("mv %s_* %s/"%(filename,filename))
-      libtbx.easy_run.fully_buffered("rm *.pdb")
+      for fname in os.listdir(os.getcwd()):
+        if fname.endswith("_cluster.pdb"):
+          ph = completion.run(pdb_filename = os.path.join(os.getcwd(),fname),
+                      crystal_symmetry=cs,
+                      model_completion=False)
+      print filename
+      os.mkdir(filename)
+      libtbx.easy_run.fully_buffered("mv %s_*  *_cluster* %s/"%(filename,filename))
+      libtbx.easy_run.fully_buffered("rm -rf *.pdb ase/")
       
 if __name__ == '__main__':
-  result = run(file_name = "/home/yanting/QR/ANI/qr-work/1bdw.pdb")
+  result = run(file_name = "/home/yanting/QR/ANI/qr-work/1kyc.pdb")
