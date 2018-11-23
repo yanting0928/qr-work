@@ -12,6 +12,10 @@ from qrefine.utils import yoink_utils
 from qrefine.plugin.yoink.pyoink import PYoink
 from qrefine.fragment import fragments
 import qrefine.completion as completion
+from mmtbx.monomer_library import server
+from mmtbx.monomer_library import idealized_aa
+from mmtbx.rotamer import rotamer_eval
+from scitbx.array_family import flex
 
 
 qrefine = libtbx.env.find_in_repositories("qrefine")
@@ -96,6 +100,29 @@ def complete_missing_atom(pdb_hierarchy,mon_lib_server):
         )
   return n_changed,pdb_hierarchy 
 
+def check_missing_atom(pdb_filename):
+  pdb_inp = iotbx.pdb.input(file_name = pdb_filename)
+  pdb_hierarchy = pdb_inp.construct_hierarchy()
+  ideal_dict = idealized_aa.residue_dict()
+  pdb_atoms = pdb_hierarchy.atoms()
+
+  selection = flex.bool(pdb_atoms.size(), True)
+  partial_sidechains = []
+  for chain in pdb_hierarchy.only_model().chains():
+    for residue_group in chain.residue_groups():
+      if(residue_group.atom_groups_size() != 1):continue
+      for residue in residue_group.atom_groups():
+        i_seqs = residue.atoms().extract_i_seq()
+        residue_sel = selection.select(i_seqs)
+        if(not residue.resname.lower() in ideal_dict.keys()): continue
+        missing_atoms = rotamer_eval.eval_residue_completeness(
+          residue          = residue,
+          mon_lib_srv      = mon_lib_server,
+          ignore_hydrogens = True)
+        if(len(missing_atoms) > 0):
+          return True
+  return False
+
 def add_hydrogens_using_ReadySet(pdb_hierarchy):
   from elbow.command_line.ready_set import run_though_all_the_options
 #  pdb_lines = open(pdb_filename, 'rb').read()
@@ -124,10 +151,10 @@ def run(file_name):
     if data_type=="X-RAY DIFFRACTION" or  data_type=="NEUTRON DIFFRACTION":
       print data_type
       pdb_hierarchy = pdb_inp.construct_hierarchy()
-      n_changed,pdb_hierarchy = complete_missing_atom(pdb_hierarchy = pdb_hierarchy,mon_lib_server = mon_lib_server)
-      if n_changed:
-        pdb_hierarchy.write_pdb_file(file_name = filename+"_complete.pdb")
-        file_name = filename+"_complete"
+#      n_changed,pdb_hierarchy = complete_missing_atom(pdb_hierarchy = pdb_hierarchy,mon_lib_server = mon_lib_server)
+#      if n_changed:
+#        pdb_hierarchy.write_pdb_file(file_name = filename+"_complete.pdb")
+#        file_name = filename+"_complete"
       if not_only_protein(pdb_hierarchy=pdb_hierarchy): 
         print "PDB file not only protein"
         pdb_hierarchy  = remove_rna_dna(pdb_hierarchy=pdb_hierarchy)
@@ -145,10 +172,12 @@ def run(file_name):
       print fq.clusters
       for fname in os.listdir(os.getcwd()):
         if fname.endswith("_cluster.pdb"):
-          ph = completion.run(pdb_filename = os.path.join(os.getcwd(),fname),
+          if check_missing_atom(pdb_filename = fname):
+            os.remove(fname)
+          else:
+            ph = completion.run(pdb_filename = os.path.join(os.getcwd(),fname),
                       crystal_symmetry=cs,
                       model_completion=False)
-      print filename
       os.mkdir(filename)
       libtbx.easy_run.fully_buffered("mv %s_*  *_cluster* %s/"%(filename,filename))
       libtbx.easy_run.fully_buffered("rm -rf *.pdb ase/")
