@@ -11,6 +11,7 @@ import qrefine.clustering as clustering
 from qrefine.utils import yoink_utils
 from qrefine.plugin.yoink.pyoink import PYoink
 from qrefine.fragment import fragments
+from qrefine.charges import charges_class
 import qrefine.completion as completion
 from mmtbx.monomer_library import server
 from mmtbx.monomer_library import idealized_aa
@@ -146,15 +147,12 @@ def run(file_name):
   pdb_inp = iotbx.pdb.input(file_name = file_name)
   resolution = get_resolution(pdb_inp = pdb_inp)
   data_type = pdb_inp.get_experiment_type()
-  if resolution > 0.9: 
+#  if resolution <= 0.9: 
+  if resolution > 0.9:
     print resolution
     if data_type=="X-RAY DIFFRACTION" or  data_type=="NEUTRON DIFFRACTION":
       print data_type
       pdb_hierarchy = pdb_inp.construct_hierarchy()
-#      n_changed,pdb_hierarchy = complete_missing_atom(pdb_hierarchy = pdb_hierarchy,mon_lib_server = mon_lib_server)
-#      if n_changed:
-#        pdb_hierarchy.write_pdb_file(file_name = filename+"_complete.pdb")
-#        file_name = filename+"_complete"
       if not_only_protein(pdb_hierarchy=pdb_hierarchy): 
         print "PDB file not only protein"
         pdb_hierarchy  = remove_rna_dna(pdb_hierarchy=pdb_hierarchy)
@@ -175,12 +173,17 @@ def run(file_name):
           if check_missing_atom(pdb_filename = fname):
             os.remove(fname)
           else:
-            ph = completion.run(pdb_filename = os.path.join(os.getcwd(),fname),
+            print fname
+            ph = completion.run(pdb_filename = fname,
                       crystal_symmetry=cs,
                       model_completion=False)
+            fname = fname[:-4]+"_capping.pdb"
+            charge = charges_class(pdb_filename=fname).get_total_charge()
+            print charge
+            os.rename(fname, fname[:-4]+'_'+str(charge)+'.pdb')
       os.mkdir(filename)
       libtbx.easy_run.fully_buffered("mv %s_*  *_cluster* %s/"%(filename,filename))
       libtbx.easy_run.fully_buffered("rm -rf *.pdb ase/")
       
 if __name__ == '__main__':
-  result = run(file_name = "/home/yanting/QR/ANI/qr-work/1kyc.pdb")
+  result = run(file_name = "/home/yanting/QR/ANI/qr-work/1yjp.pdb")

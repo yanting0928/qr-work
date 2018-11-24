@@ -1,5 +1,3 @@
-from mmtbx.building import extend_sidechains
-import os
 import iotbx.pdb
 from mmtbx.monomer_library import server
 from mmtbx.monomer_library import idealized_aa
