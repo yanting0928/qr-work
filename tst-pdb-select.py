@@ -159,7 +159,7 @@ def run(file_name):
       pdb_hierarchy = add_hydrogens_using_ReadySet(pdb_hierarchy=pdb_hierarchy)
       if have_conformers(pdb_hierarchy=pdb_hierarchy):
         pdb_hierarchy.remove_alt_confs(always_keep_one_conformer=True)
-      file_name = file_name+"_update"
+      file_name = filename+"_update"
       pdb_hierarchy.write_pdb_file(file_name = file_name+".pdb")
       pdb_inp = iotbx.pdb.input(file_name = file_name+".pdb")
       cs = box_pdb(pdb_inp = pdb_inp,filename=file_name)

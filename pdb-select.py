@@ -182,6 +182,7 @@ def run(file_name):
             os.rename(fname, fname[:-4]+'_'+str(charge)+'.pdb')
       os.mkdir(filename)
       libtbx.easy_run.fully_buffered("mv %s_*  *_cluster* %s/"%(filename,filename))
+      libtbx.easy_run.fully_buffered("rm -rf *.pdb ase/")
 
 if __name__ == '__main__':
   path = "/home/yanting/pdb/pdb/"
