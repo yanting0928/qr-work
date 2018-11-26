@@ -106,7 +106,10 @@ def add_hydrogens_using_ReadySet(pdb_hierarchy):
     )
   return rc['model_hierarchy']
 
-def run(file_name, d_min=10, maxnum_residues_in_cluster=5):
+def run(file_name, 
+        d_min=0.9, 
+        maxnum_residues_in_cluster=5, 
+        filter_non_protein=True):
   prefix = os.path.basename(file_name)[:4]
   print file_name, prefix
   pdb_inp = iotbx.pdb.input(file_name = file_name)
@@ -114,8 +117,9 @@ def run(file_name, d_min=10, maxnum_residues_in_cluster=5):
   data_type = pdb_inp.get_experiment_type()
   if(resolution is not None and resolution <= d_min):
     if(data_type in ["X-RAY DIFFRACTION","NEUTRON DIFFRACTION"]):
-      pdb_hierarchy = keep_protein_only(
-        pdb_hierarchy = pdb_inp.construct_hierarchy())
+      pdb_hierarchy = pdb_inp.construct_hierarchy()
+      if(filter_non_protein):
+        pdb_hierarchy = keep_protein_only(pdb_hierarchy = pdb_hierarchy)
       if(pdb_hierarchy is not None):
         if(have_conformers(pdb_hierarchy=pdb_hierarchy)):
           pdb_hierarchy.remove_alt_confs(always_keep_one_conformer=True)
