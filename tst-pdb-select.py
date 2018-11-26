@@ -18,7 +18,6 @@ from mmtbx.monomer_library import idealized_aa
 from mmtbx.rotamer import rotamer_eval
 from scitbx.array_family import flex
 
-
 qrefine = libtbx.env.find_in_repositories("qrefine")
 mon_lib_server = server.server()
 
