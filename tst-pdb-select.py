@@ -36,7 +36,7 @@ def not_only_protein(pdb_hierarchy):
     for chain in model.chains():
       for rg in chain.residue_groups():
         for ag in rg.atom_groups():
-          if  not (get_class(ag.resname) == "common_amino_acid" or  get_class(ag.resname) == "modified_amino_acid"):
+          if  not (get_class(ag.resname) == "common_amino_acid"):
             return True 
   return False
 
@@ -67,7 +67,7 @@ def remove_rna_dna(pdb_hierarchy):
     for chain in model.chains():
       for rg in chain.residue_groups():
         for ag in rg.atom_groups():
-          if  not (get_class(ag.resname) == "common_amino_acid" or  get_class(ag.resname) == "modified_amino_acid"):
+          if  not (get_class(ag.resname) == "common_amino_acid"):
             not_protein_resname.append(ag.resname.strip())
   not_protein_resname_h=list(set(not_protein_resname))
   selection=" and ".join("not resname %s"%i for i in not_protein_resname_h)
@@ -147,8 +147,8 @@ def run(file_name):
   pdb_inp = iotbx.pdb.input(file_name = file_name)
   resolution = get_resolution(pdb_inp = pdb_inp)
   data_type = pdb_inp.get_experiment_type()
-#  if resolution <= 0.9: 
-  if resolution > 0.9:
+  if resolution <= 0.9: 
+#  if resolution > 0.9:
     print resolution
     if data_type=="X-RAY DIFFRACTION" or  data_type=="NEUTRON DIFFRACTION":
       print data_type
@@ -173,17 +173,15 @@ def run(file_name):
           if check_missing_atom(pdb_filename = fname):
             os.remove(fname)
           else:
-            print fname
             ph = completion.run(pdb_filename = fname,
                       crystal_symmetry=cs,
                       model_completion=False)
             fname = fname[:-4]+"_capping.pdb"
             charge = charges_class(pdb_filename=fname).get_total_charge()
-            print charge
             os.rename(fname, fname[:-4]+'_'+str(charge)+'.pdb')
       os.mkdir(filename)
       libtbx.easy_run.fully_buffered("mv %s_*  *_cluster* %s/"%(filename,filename))
       libtbx.easy_run.fully_buffered("rm -rf *.pdb ase/")
       
 if __name__ == '__main__':
-  result = run(file_name = "/home/yanting/QR/ANI/qr-work/1yjp.pdb")
+  result = run(file_name = "/home/yanting/QR/ANI/qr-work/4oy5.pdb")
