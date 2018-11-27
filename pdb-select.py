@@ -16,6 +16,7 @@ from mmtbx.monomer_library import server
 from mmtbx.monomer_library import idealized_aa
 from mmtbx.rotamer import rotamer_eval
 from scitbx.array_family import flex
+from libtbx import easy_mp
 
 
 qrefine = libtbx.env.find_in_repositories("qrefine")
@@ -183,6 +184,7 @@ def run(file_name):
       libtbx.easy_run.fully_buffered("rm -rf *.pdb ase/")
 
 if __name__ == '__main__':
+  nproc = 4
   path = "/home/yanting/pdb/pdb/"
   dpath = "/home/yanting/pdb/structure_factors/"
   of = open("".join([path,"INDEX"]),"r")
@@ -193,13 +195,14 @@ if __name__ == '__main__':
   dfiles = [
     os.path.basename("".join([path,f]).strip())[1:5] for f in of.readlines()]
   of.close()
+  args=[]
   for f in files:
     pdb_code = os.path.basename(f)[3:7]
     if(pdb_code in dfiles):
-      try:
-        run(file_name = f)
-      except KeyboardInterrupt:raise
-      except Exception,e:
-        print "FAILED:",f
-        print str(e)
-        print "-"*79
+      args.append([f,pdb_code])
+  
+  for arg, res, err_str in easy_mp.multi_core_run(run, args, nproc):
+    if err_str:
+      print 'Error output from %s' % arg
+      print err_str
+      print '_'*80
