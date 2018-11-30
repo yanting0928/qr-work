@@ -1,0 +1,107 @@
+REMARK charge= -1 
+CRYST1   40.877   42.887   50.741  90.00  90.00  90.00 P 1
+SCALE1      0.024464  0.000000  0.000000        0.00000
+SCALE2      0.000000  0.023317  0.000000        0.00000
+SCALE3      0.000000  0.000000  0.019708        0.00000
+ATOM      1  N   GLY B   1      19.931  27.890  28.117  1.00  4.02           N
+ANISOU    1  N   GLY B   1      514    418    597     98    -32     28       N
+ATOM      2  CA  GLY B   1      19.209  27.656  29.358  1.00  3.85           C
+ANISOU    2  CA  GLY B   1      420    451    592     73    -17     -1       C
+ATOM      3  C   GLY B   1      19.879  28.303  30.570  1.00  3.61           C
+ANISOU    3  C   GLY B   1      478    319    575     58    -11     35       C
+ATOM      4  O   GLY B   1      21.110  28.353  30.652  1.00  4.25           O
+ANISOU    4  O   GLY B   1      470    433    711     53    -26    -32       O
+ATOM         H1  GLY B   1      20.179  27.102  27.760  1.00  4.02           H
+ATOM      5  H2  GLY B   1      19.571  28.754  27.664  1.00  4.03           H
+ATOM      6  HA2 GLY B   1      18.195  28.044  29.260  1.00  3.86           H
+ATOM      7  HA3 GLY B   1      19.125  26.582  29.526  1.00  3.86           H
+ATOM      8  N   GLU B   3      18.656  27.327  33.803  1.00  4.48           N
+ANISOU    8  N   GLU B   3      607    451    645     72    -67      0       N
+ATOM      9  CA  GLU B   3      18.315  26.490  34.938  1.00  4.81           C
+ANISOU    9  CA  GLU B   3      647    510    672    111     -3     44       C
+ATOM     10  C   GLU B   3      19.563  25.836  35.526  1.00  4.62           C
+ANISOU   10  C   GLU B   3      624    496    634     83    -30    -10       C
+ATOM     11  O   GLU B   3      20.592  25.720  34.863  1.00  4.86           O
+ANISOU   11  O   GLU B   3      580    542    723     67    -24     53       O
+ATOM     12  CB  GLU B   3      17.357  25.408  34.534  1.00  5.76           C
+ANISOU   12  CB  GLU B   3      691    669    830    -11      5    117       C
+ATOM     13  CG  GLU B   3      16.077  25.957  33.912  1.00  7.01           C
+ANISOU   13  CG  GLU B   3      827    877    958    -14   -167    153       C
+ATOM     14  CD  GLU B   3      14.902  25.031  33.928  1.00  6.87           C
+ANISOU   14  CD  GLU B   3      897    669   1043     11   -103      5       C
+ATOM     15  OE1 GLU B   3      14.805  24.160  34.792  1.00  8.03           O
+ANISOU   15  OE1 GLU B   3      934    892   1226    -16    -62    205       O
+ATOM     16  OE2 GLU B   3      13.987  25.185  33.060  1.00  7.13           O
+ANISOU   16  OE2 GLU B   3      908    769   1033    -47   -119     -0       O
+ATOM     17  H   GLU B   3      18.491  26.851  32.920  1.00  4.54           H
+ANISOU   17  H   GLU B   3      631    484    611     70    -57     20       H
+ATOM     18  HA  GLU B   3      17.860  27.008  35.635  1.00  4.90           H
+ANISOU   18  HA  GLU B   3      664    549    650     67     -8      8       H
+ATOM     19  HB2 GLU B   3      17.824  24.835  33.868  1.00  5.88           H
+ANISOU   19  HB2 GLU B   3      728    698    807     -6    -27     70       H
+ATOM     20  HB3 GLU B   3      17.150  24.790  35.263  1.00  5.65           H
+ANISOU   20  HB3 GLU B   3      741    669    737     12    -24     75       H
+ATOM     21  HG2 GLU B   3      15.774  26.809  34.275  1.00  7.09           H
+ANISOU   21  HG2 GLU B   3      823    917    955    -40   -101     92       H
+ATOM     22  HG3 GLU B   3      16.302  26.120  32.986  1.00  6.73           H
+ANISOU   22  HG3 GLU B   3      818    790    948     -8   -118     75       H
+ATOM     23  N   LEU B   5      19.887  22.553  36.619  1.00  5.88           N
+ANISOU   23  N   LEU B   5      824    698    711    289    -14     85       N
+ATOM     24  CA  LEU B   5      19.954  21.103  36.437  1.00  6.24           C
+ANISOU   24  CA  LEU B   5      945    652    773    259     26    104       C
+ATOM     25  C   LEU B   5      19.347  20.745  35.096  1.00  6.07           C
+ANISOU   25  C   LEU B   5      922    644    742    340     47    109       C
+ATOM     26  O   LEU B   5      18.216  21.135  34.816  1.00  8.63           O
+ANISOU   26  O   LEU B   5     1111   1312    857    731    -19    -29       O
+ATOM     27  CB  LEU B   5      19.161  20.333  37.510  1.00  7.29           C
+ANISOU   27  CB  LEU B   5     1204    710    857    176    106    133       C
+ATOM     28  CG  LEU B   5      19.652  20.435  38.922  1.00  8.25           C
+ANISOU   28  CG  LEU B   5     1344    939    851    131     59    125       C
+ATOM     29  CD1 LEU B   5      18.655  19.844  39.895  1.00 10.12           C
+ANISOU   29  CD1 LEU B   5     1594   1280    970     29    177    224       C
+ATOM     30  CD2 LEU B   5      20.955  19.703  39.039  1.00 10.19           C
+ANISOU   30  CD2 LEU B   5     1288   1384   1199    125    -69    292       C
+ATOM     31  H   LEU B   5      18.996  22.938  36.325  1.00  5.66           H
+ANISOU   31  H   LEU B   5      682    723    746    140     -9    101       H
+ATOM     32  HA  LEU B   5      20.880  20.821  36.407  1.00  6.28           H
+ANISOU   32  HA  LEU B   5      874    721    793    165     17    108       H
+ATOM     33  HB2 LEU B   5      18.262  20.698  37.510  1.00  7.18           H
+ANISOU   33  HB2 LEU B   5     1084    809    835     68     71    104       H
+ATOM     34  HB3 LEU B   5      19.102  19.392  37.295  1.00  7.28           H
+ANISOU   34  HB3 LEU B   5     1141    788    836    147     58     23       H
+ATOM     35  HG  LEU B   5      19.819  21.351  39.169  1.00  8.57           H
+ANISOU   35  HG  LEU B   5     1339    991    925     77     54     90       H
+ATOM     36 HD11 LEU B   5      17.938  20.477  40.005  1.00  9.81           H
+ANISOU   36 HD11 LEU B   5     1454   1274   1001    -37    102    176       H
+ATOM     37 HD12 LEU B   5      19.080  19.687  40.741  1.00 10.02           H
+ANISOU   37 HD12 LEU B   5     1435   1218   1155     50     28    193       H
+ATOM     38 HD13 LEU B   5      18.316  19.018  39.540  1.00  9.96           H
+ANISOU   38 HD13 LEU B   5     1462   1314   1008     75    104    168       H
+ATOM     39 HD21 LEU B   5      20.835  18.794  38.753  1.00  9.95           H
+ANISOU   39 HD21 LEU B   5     1289   1390   1103    144    -23    230       H
+ATOM     40 HD22 LEU B   5      21.244  19.718  39.954  1.00  9.85           H
+ANISOU   40 HD22 LEU B   5     1305   1243   1195    112    -58    205       H
+ATOM     41 HD23 LEU B   5      21.616  20.134  38.493  1.00  9.48           H
+ANISOU   41 HD23 LEU B   5     1279   1193   1131    106    -75    169       H
+ATOM     42  N   GLY B   6      20.076  19.954  34.312  1.00  5.08           N
+ANISOU   42  N   GLY B   6      681    495    753    153     26     98       N
+ATOM     43  CA  GLY B   6      19.572  19.462  33.055  1.00  4.86           C
+ANISOU   43  CA  GLY B   6      562    501    785    112     42     61       C
+ATOM     44  C   GLY B   6      20.627  19.442  31.983  1.00  4.26           C
+ANISOU   44  C   GLY B   6      470    389    760     51      1     43       C
+ATOM     45  O   GLY B   6      21.798  19.808  32.208  1.00  4.77           O
+ANISOU   45  O   GLY B   6      500    514    800     35    -24    -32       O
+ATOM     46  H   GLY B   6      21.019  19.595  34.508  1.00  5.08           H
+ANISOU   46  H   GLY B   6      647    528    755    117     25     89       H
+ATOM     47  HA2 GLY B   6      19.286  18.541  33.172  1.00  4.94           H
+ANISOU   47  HA2 GLY B   6      551    557    770     33     22     66       H
+ATOM     48  HA3 GLY B   6      18.846  20.024  32.745  1.00  4.85           H
+ANISOU   48  HA3 GLY B   6      550    520    771     78      2     78       H
+TER
+ATOM         HC  GLY B   1      19.320  28.689  31.303  1.00  3.61           H
+ATOM         H2  GLU B   3      18.154  28.074  33.819  1.00  4.48           H
+ATOM         HC  GLU B   3      19.552  25.493  36.465  1.00  4.62           H
+ATOM         H2  LEU B   5      20.002  22.752  37.489  1.00  5.88           H
+ATOM         HC  GLY B   6      20.397  19.129  31.061  1.00  4.26           H
+TER
+END

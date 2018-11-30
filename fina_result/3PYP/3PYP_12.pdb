@@ -1,0 +1,103 @@
+REMARK charge= 0 
+CRYST1   58.243   56.891   56.933  90.00  90.00  90.00 P 1
+SCALE1      0.017169  0.000000  0.000000        0.00000
+SCALE2      0.000000  0.017577  0.000000        0.00000
+SCALE3      0.000000  0.000000  0.017565        0.00000
+ATOM      1  N   CYS A  69      19.462  32.264  19.324  1.00  4.55           N
+ANISOU    1  N   CYS A  69      501    664    564     90   -194     33       N
+ATOM      2  CA  CYS A  69      18.414  32.519  20.304  1.00  4.62           C
+ANISOU    2  CA  CYS A  69      468    682    607    -33   -123     64       C
+ATOM      3  C   CYS A  69      18.996  33.238  21.535  1.00  4.17           C
+ANISOU    3  C   CYS A  69      410    602    572   -105    -59    119       C
+ATOM      4  O   CYS A  69      18.184  33.830  22.298  1.00  4.70           O
+ANISOU    4  O   CYS A  69      308    836    640     59   -101     12       O
+ATOM      5  CB  CYS A  69      17.703  31.223  20.657  1.00  5.55           C
+ANISOU    5  CB  CYS A  69      699    716    694   -146   -264     72       C
+ATOM      6  SG  CYS A  69      18.398  30.264  21.990  1.00  6.08           S
+ANISOU    6  SG  CYS A  69      815    631    863   -163   -275    239       S
+ATOM      7  H   CYS A  69      19.710  31.439  19.148  1.00  5.46           H
+ANISOU    7  H   CYS A  69      692    692    692      0      0     -0       H
+ATOM      8  HA  CYS A  69      17.744  33.130  19.882  1.00  5.55           H
+ANISOU    8  HA  CYS A  69      703    703    703     -0     -0      0       H
+ATOM      9  HB2 CYS A  69      16.765  31.440  20.890  1.00  6.66           H
+ANISOU    9  HB2 CYS A  69      843    843    843      0     -0      0       H
+ATOM     10  HB3 CYS A  69      17.680  30.654  19.847  1.00  6.66           H
+ANISOU   10  HB3 CYS A  69      843    843    843      0     -0      0       H
+ATOM     11  HG  CYS A  69      18.536  29.029  21.610  1.00  6.08           H
+ATOM     12  N   THR A  70      20.313  33.216  21.747  1.00  3.90           N
+ANISOU   12  N   THR A  70      391    545    544    -45    -13     49       N
+ATOM     13  CA  THR A  70      20.990  33.902  22.833  1.00  4.18           C
+ANISOU   13  CA  THR A  70      440    596    551    -40      4      5       C
+ATOM     14  C   THR A  70      21.446  35.299  22.426  1.00  4.40           C
+ANISOU   14  C   THR A  70      550    593    529    -27      0    -47       C
+ATOM     15  O   THR A  70      21.953  36.040  23.313  1.00  4.67           O
+ANISOU   15  O   THR A  70      596    563    616    -62     13    -20       O
+ATOM     16  CB  THR A  70      22.204  33.101  23.356  1.00  4.53           C
+ANISOU   16  CB  THR A  70      466    707    548    -39    -38     22       C
+ATOM     17  OG1 THR A  70      23.324  33.231  22.444  1.00  4.64           O
+ANISOU   17  OG1 THR A  70      525    656    583     60    -57    -87       O
+ATOM     18  CG2 THR A  70      21.861  31.640  23.637  1.00  5.77           C
+ANISOU   18  CG2 THR A  70      761    729    703    -61   -252     63       C
+ATOM     19  H   THR A  70      20.808  32.751  21.187  1.00  4.67           H
+ANISOU   19  H   THR A  70      591    591    591      0     -0      0       H
+ATOM     20  HA  THR A  70      20.340  33.999  23.587  1.00  5.01           H
+ANISOU   20  HA  THR A  70      635    635    635      0      0      0       H
+ATOM     21  HB  THR A  70      22.479  33.513  24.224  1.00  5.44           H
+ANISOU   21  HB  THR A  70      689    689    689      0      0      0       H
+ATOM     22  HG1 THR A  70      23.061  32.911  21.556  1.00  6.97           H
+ANISOU   22  HG1 THR A  70      883    883    883      0     -0     -0       H
+ATOM     23 HG21 THR A  70      21.547  31.213  22.813  1.00  8.65           H
+ANISOU   23 HG21 THR A  70     1096   1096   1096      0      0      0       H
+ATOM     24 HG22 THR A  70      22.659  31.173  23.962  1.00  8.65           H
+ANISOU   24 HG22 THR A  70     1096   1096   1096      0      0      0       H
+ATOM     25 HG23 THR A  70      21.157  31.594  24.317  1.00  8.65           H
+ANISOU   25 HG23 THR A  70     1096   1096   1096      0      0      0       H
+ATOM     26  N   TYR A  94      17.155  30.217  31.077  1.00  4.40           N
+ANISOU   26  N   TYR A  94      613    601    459     24    -54    -47       N
+ATOM     27  CA  TYR A  94      16.995  30.605  29.660  1.00  4.27           C
+ANISOU   27  CA  TYR A  94      574    624    424      4    -45     19       C
+ATOM     28  C   TYR A  94      16.411  29.420  28.924  1.00  4.21           C
+ANISOU   28  C   TYR A  94      499    634    465     47    -17    -52       C
+ATOM     29  O   TYR A  94      16.544  28.280  29.383  1.00  6.17           O
+ANISOU   29  O   TYR A  94     1072    609    664    -11   -313     -8       O
+ATOM     30  CB  TYR A  94      18.367  31.002  29.064  1.00  5.01           C
+ANISOU   30  CB  TYR A  94      549    724    630    -33    -38    -12       C
+ATOM     31  CG  TYR A  94      18.287  31.980  27.924  1.00  4.68           C
+ANISOU   31  CG  TYR A  94      557    665    555    -76    -34    -23       C
+ATOM     32  CD1 TYR A  94      18.123  33.349  28.192  1.00  5.39           C
+ANISOU   32  CD1 TYR A  94      712    741    594    -19     41    -51       C
+ATOM     33  CD2 TYR A  94      18.374  31.578  26.595  1.00  4.76           C
+ANISOU   33  CD2 TYR A  94      558    649    602    -29     32    -86       C
+ATOM     34  CE1 TYR A  94      18.064  34.271  27.163  1.00  5.91           C
+ANISOU   34  CE1 TYR A  94      886    673    686    -60     60    -29       C
+ATOM     35  CE2 TYR A  94      18.292  32.510  25.551  1.00  5.00           C
+ANISOU   35  CE2 TYR A  94      592    782    524    -18      0     -2       C
+ATOM     36  CZ  TYR A  94      18.154  33.839  25.822  1.00  5.27           C
+ANISOU   36  CZ  TYR A  94      677    688    639    -17     80     30       C
+ATOM     37  OH  TYR A  94      18.094  34.822  24.847  1.00  6.49           O
+ANISOU   37  OH  TYR A  94     1005    765    695     26    114    127       O
+ATOM     38  H   TYR A  94      17.212  29.366  31.290  1.00  5.29           H
+ANISOU   38  H   TYR A  94      670    670    670      0      0      0       H
+ATOM     39  HA  TYR A  94      16.366  31.381  29.595  1.00  5.12           H
+ANISOU   39  HA  TYR A  94      648    648    648      0      0      0       H
+ATOM     40  HB2 TYR A  94      18.922  31.396  29.783  1.00  6.01           H
+ANISOU   40  HB2 TYR A  94      761    761    761      0      0      0       H
+ATOM     41  HB3 TYR A  94      18.824  30.182  28.748  1.00  6.01           H
+ANISOU   41  HB3 TYR A  94      761    761    761      0      0      0       H
+ATOM     42  HD1 TYR A  94      18.051  33.645  29.091  1.00  6.47           H
+ANISOU   42  HD1 TYR A  94      819    819    819      0     -0     -0       H
+ATOM     43  HD2 TYR A  94      18.491  30.657  26.392  1.00  5.71           H
+ANISOU   43  HD2 TYR A  94      723    723    723      0     -0      0       H
+ATOM     44  HE1 TYR A  94      17.963  35.195  27.359  1.00  7.09           H
+ANISOU   44  HE1 TYR A  94      898    898    898     -0     -0     -0       H
+ATOM     45  HE2 TYR A  94      18.332  32.213  24.649  1.00  6.00           H
+ANISOU   45  HE2 TYR A  94      760    760    760      0     -0      0       H
+ATOM     46  HH  TYR A  94      18.154  34.468  24.087  1.00  9.73           H
+ANISOU   46  HH  TYR A  94     1232   1232   1232      0      0      0       H
+TER
+ATOM         H2  CYS A  69      19.210  32.590  18.524  1.00  4.55           H
+ATOM         HC  THR A  70      21.339  35.604  21.480  1.00  4.40           H
+ATOM         H2  TYR A  94      17.912  30.577  31.404  1.00  4.40           H
+ATOM         HC  TYR A  94      15.917  29.558  28.066  1.00  4.21           H
+TER
+END

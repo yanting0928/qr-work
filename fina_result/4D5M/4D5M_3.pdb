@@ -1,0 +1,138 @@
+REMARK charge= 1 
+CRYST1   40.907   57.998   37.372  90.00  90.00  90.00 P 1
+SCALE1      0.024446  0.000000  0.000000        0.00000
+SCALE2      0.000000  0.017242  0.000000        0.00000
+SCALE3      0.000000  0.000000  0.026758        0.00000
+ATOM      1  N   LEU D   7      20.962  16.714  20.153  1.00  1.08           N
+ANISOU    1  N   LEU D   7      207     78    125     -8     -4     -9       N
+ATOM      2  CA  LEU D   7      21.073  15.268  20.078  1.00  1.25           C
+ANISOU    2  CA  LEU D   7      289     72    114    -23    -20      6       C
+ATOM      3  C   LEU D   7      21.961  14.802  18.912  1.00  1.04           C
+ANISOU    3  C   LEU D   7      149     92    156     -2    -69      0       C
+ATOM      4  O   LEU D   7      22.015  13.603  18.627  1.00  1.30           O
+ANISOU    4  O   LEU D   7      230     86    177     -6    -29    -28       O
+ATOM      5  CB  LEU D   7      19.686  14.622  20.038  1.00  1.63           C
+ANISOU    5  CB  LEU D   7      310     74    235    -46     88    -57       C
+ATOM      6  CG  LEU D   7      19.098  14.447  21.448  1.00  3.26           C
+ANISOU    6  CG  LEU D   7      762    137    339   -125    312    -85       C
+ATOM      7  CD1 LEU D   7      17.626  14.137  21.373  1.00  5.19           C
+ANISOU    7  CD1 LEU D   7      864    482    625   -408    594   -309       C
+ATOM      8  CD2 LEU D   7      19.833  13.351  22.175  1.00  5.39           C
+ANISOU    8  CD2 LEU D   7     1477    241    329     31    415     84       C
+ATOM      9  H   LEU D   7      20.325  17.101  19.472  1.00  1.08           H
+ANISOU    9  H   LEU D   7      211     80    120    -20     -7     -1       H
+ATOM     10  HA  LEU D   7      21.517  14.954  20.889  1.00  1.30           H
+ANISOU   10  HA  LEU D   7      298     81    116    -11    -18      5       H
+ATOM     11  HB2 LEU D   7      19.084  15.188  19.532  1.00  1.75           H
+ANISOU   11  HB2 LEU D   7      369     91    205    -47     74    -41       H
+ATOM     12  HB3 LEU D   7      19.739  13.746  19.626  1.00  1.80           H
+ANISOU   12  HB3 LEU D   7      404     85    195    -41     73    -59       H
+ATOM     13  HG  LEU D   7      19.210  15.272  21.946  1.00  3.10           H
+ANISOU   13  HG  LEU D   7      682    204    292   -113    266   -122       H
+ATOM     14 HD11 LEU D   7      17.502  13.330  20.868  1.00  4.48           H
+ANISOU   14 HD11 LEU D   7      816    409    478   -298    458   -211       H
+ATOM     15 HD12 LEU D   7      17.285  14.023  22.263  1.00  4.40           H
+ANISOU   15 HD12 LEU D   7      836    367    468   -287    381   -246       H
+ATOM     16 HD13 LEU D   7      17.176  14.866  20.940  1.00  4.73           H
+ANISOU   16 HD13 LEU D   7      814    481    503   -372    475   -299       H
+ATOM     17 HD21 LEU D   7      19.811  12.551  21.646  1.00  4.16           H
+ANISOU   17 HD21 LEU D   7      923    321    336      1    331     18       H
+ATOM     18 HD22 LEU D   7      20.740  13.617  22.333  1.00  4.00           H
+ANISOU   18 HD22 LEU D   7     1071    190    258    136    362     34       H
+ATOM     19 HD23 LEU D   7      19.395  13.200  23.016  1.00  4.05           H
+ANISOU   19 HD23 LEU D   7      970    224    346    -20    325    -18       H
+ATOM     20  N   ARG D   8      22.682  15.713  18.267  1.00  1.16           N
+ANISOU   20  N   ARG D   8      174     53    215     34     -6    -31       N
+ATOM     21  CA  ARG D   8      23.545  15.295  17.176  1.00  1.19           C
+ANISOU   21  CA  ARG D   8      163     77    213     20     -8    -18       C
+ATOM     22  C   ARG D   8      24.519  14.228  17.709  1.00  1.09           C
+ANISOU   22  C   ARG D   8      133     80    203      9    -39    -51       C
+ATOM     23  O   ARG D   8      25.191  14.476  18.724  1.00  1.70           O
+ANISOU   23  O   ARG D   8      225    109    311     69   -119   -170       O
+ATOM     24  CB  ARG D   8      24.323  16.491  16.610  1.00  1.63           C
+ANISOU   24  CB  ARG D   8      205     97    318     14     60    -37       C
+ATOM     25  CG  ARG D   8      25.084  16.168  15.349  1.00  1.43           C
+ANISOU   25  CG  ARG D   8      191     96    257     41      6    -27       C
+ATOM     26  CD  ARG D   8      25.898  17.375  14.917  1.00  1.39           C
+ANISOU   26  CD  ARG D   8      204     92    234     69      0      8       C
+ATOM     27  NE  ARG D   8      26.667  17.173  13.695  1.00  1.30           N
+ANISOU   27  NE  ARG D   8      241     70    184     33     -7     36       N
+ATOM     28  CZ  ARG D   8      27.757  16.398  13.632  1.00  1.01           C
+ANISOU   28  CZ  ARG D   8      178     58    149      4      3     -4       C
+ATOM     29  NH1 ARG D   8      28.266  15.837  14.715  1.00  1.31           N
+ANISOU   29  NH1 ARG D   8      153    209    134     49     -4     -6       N
+ATOM     30  NH2 ARG D   8      28.329  16.170  12.435  1.00  1.44           N
+ANISOU   30  NH2 ARG D   8      238    180    131     15     28     -9       N
+ATOM     31  H   ARG D   8      22.697  16.703  18.463  1.00  1.08           H
+ANISOU   31  H   ARG D   8      166     53    192     17    -18    -27       H
+ATOM     32  HA  ARG D   8      23.000  14.921  16.458  1.00  1.23           H
+ANISOU   32  HA  ARG D   8      170     79    220     23    -10    -30       H
+ATOM     33  HB2 ARG D   8      23.699  17.204  16.404  1.00  1.50           H
+ANISOU   33  HB2 ARG D   8      199    104    267      7     33    -33       H
+ATOM     34  HB3 ARG D   8      24.962  16.793  17.274  1.00  1.56           H
+ANISOU   34  HB3 ARG D   8      208     95    288     30     47    -20       H
+ATOM     35  HG2 ARG D   8      25.688  15.427  15.508  1.00  1.36           H
+ANISOU   35  HG2 ARG D   8      180     93    245     34     11    -22       H
+ATOM     36  HG3 ARG D   8      24.459  15.949  14.641  1.00  1.39           H
+ANISOU   36  HG3 ARG D   8      187     92    250     40     11    -22       H
+ATOM     37  HD2 ARG D   8      25.287  18.110  14.753  1.00  1.23           H
+ANISOU   37  HD2 ARG D   8      163     80    223     44      0      8       H
+ATOM     38  HD3 ARG D   8      26.508  17.618  15.629  1.00  1.39           H
+ANISOU   38  HD3 ARG D   8      208     97    223     50      7      8       H
+ATOM     39  HE  ARG D   8      26.497  17.776  12.955  1.00  1.14           H
+ANISOU   39  HE  ARG D   8      216     71    146     29     -0     16       H
+ATOM     40 HH11 ARG D   8      27.902  15.939  15.485  1.00  1.14           H
+ANISOU   40 HH11 ARG D   8      163    135    134     31     -0     -6       H
+ATOM     41 HH12 ARG D   8      28.976  15.355  14.650  1.00  1.12           H
+ANISOU   41 HH12 ARG D   8      153    137    137     24     -1     -5       H
+ATOM     42 HH21 ARG D   8      28.018  16.551  11.730  1.00  1.28           H
+ANISOU   42 HH21 ARG D   8      214    125    146      2     21    -11       H
+ATOM     43 HH22 ARG D   8      29.058  15.716  12.386  1.00  1.29           H
+ANISOU   43 HH22 ARG D   8      223    130    139     -7     16     -6       H
+ATOM     44  N   PRO D   9      24.645  13.077  17.062  1.00  0.92           N
+ANISOU   44  N   PRO D   9      163     77    108     16    -68    -34       N
+ATOM     45  CA  PRO D   9      25.431  11.988  17.665  1.00  0.82           C
+ANISOU   45  CA  PRO D   9      198     54     61     31    -40    -40       C
+ATOM     46  C   PRO D   9      26.887  12.389  17.918  1.00  0.91           C
+ANISOU   46  C   PRO D   9      162     88     97     49    -49    -80       C
+ATOM     47  O   PRO D   9      27.564  12.899  17.047  1.00  2.04           O
+ANISOU   47  O   PRO D   9      140    358    276      7    -45    142       O
+ATOM     48  CB  PRO D   9      25.303  10.859  16.638  1.00  1.24           C
+ANISOU   48  CB  PRO D   9      250     78    143     36    -93    -86       C
+ATOM     49  CG  PRO D   9      23.928  11.084  16.036  1.00  1.59           C
+ANISOU   49  CG  PRO D   9      280    132    192     37   -146   -127       C
+ATOM     50  CD  PRO D   9      23.841  12.595  15.920  1.00  1.33           C
+ANISOU   50  CD  PRO D   9      218    155    133     51   -107    -73       C
+ATOM     51  HA  PRO D   9      25.013  11.704  18.504  1.00  0.81           H
+ANISOU   51  HA  PRO D   9      180     66     61     30    -43    -48       H
+ATOM     52  HB2 PRO D   9      25.995  10.939  15.964  1.00  1.19           H
+ANISOU   52  HB2 PRO D   9      242     80    132     37    -96    -79       H
+ATOM     53  HB3 PRO D   9      25.348  10.000  17.085  1.00  1.19           H
+ANISOU   53  HB3 PRO D   9      237     88    126     34    -87    -79       H
+ATOM     54  HG2 PRO D   9      23.875  10.664  15.163  1.00  1.36           H
+ANISOU   54  HG2 PRO D   9      258    128    130     44   -121    -66       H
+ATOM     55  HG3 PRO D   9      23.244  10.740  16.631  1.00  1.51           H
+ANISOU   55  HG3 PRO D   9      274    129    171     52   -141   -104       H
+ATOM     56  HD2 PRO D   9      24.226  12.894  15.082  1.00  1.25           H
+ANISOU   56  HD2 PRO D   9      211    123    141     38   -104    -72       H
+ATOM     57  HD3 PRO D   9      22.916  12.868  16.007  1.00  1.23           H
+ANISOU   57  HD3 PRO D   9      208    121    140     31    -96    -65       H
+ATOM     58  N   GLY D  10      27.330  12.030  19.117  1.00  0.87           N
+ANISOU   58  N   GLY D  10      144     98     89     44    -33    -80       N
+ATOM     59  CA  GLY D  10      28.652  12.351  19.610  1.00  0.96           C
+ANISOU   59  CA  GLY D  10      130    119    114     60    -49   -102       C
+ATOM     60  C   GLY D  10      28.653  13.458  20.667  1.00  0.59           C
+ANISOU   60  C   GLY D  10      110     52     61     46    -22    -38       C
+ATOM     61  O   GLY D  10      29.674  13.651  21.321  1.00  0.94           O
+ANISOU   61  O   GLY D  10      142    122     95     34    -41    -55       O
+ATOM     62  H   GLY D  10      26.785  11.502  19.783  1.00  0.86           H
+ANISOU   62  H   GLY D  10      145     93     88     46    -39    -78       H
+ATOM     63  HA2 GLY D  10      29.040  11.556  20.008  1.00  0.88           H
+ANISOU   63  HA2 GLY D  10      131    108     97     41    -35    -86       H
+ATOM     64  HA3 GLY D  10      29.225  12.629  18.879  1.00  0.89           H
+ANISOU   64  HA3 GLY D  10      137     96    107     55    -52    -81       H
+TER
+ATOM         H2  LEU D   7      20.663  16.950  20.968  1.00  1.08           H
+ATOM         HC  GLY D  10      27.832  14.009  20.815  1.00  0.59           H
+TER
+END

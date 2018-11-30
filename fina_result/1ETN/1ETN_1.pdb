@@ -1,0 +1,186 @@
+REMARK charge= -1 
+CRYST1   33.001   35.868   31.853  90.00  90.00  90.00 P 1
+SCALE1      0.030302  0.000000  0.000000        0.00000
+SCALE2      0.000000  0.027880  0.000000        0.00000
+SCALE3      0.000000  0.000000  0.031394        0.00000
+ATOM      1  N   ASN A  11      20.346  20.500  13.926  1.00  4.88           N
+SIGATM    1  N   ASN A  11       0.011   0.011   0.013  0.00  0.00           N
+ANISOU    1  N   ASN A  11      475    530    851    -82    217     86       N
+ATOM      2  CA  ASN A  11      20.194  21.910  14.246  1.00  5.13           C
+SIGATM    2  CA  ASN A  11       0.015   0.014   0.016  0.00  0.00           C
+ANISOU    2  CA  ASN A  11      588    573    790    167    293     44       C
+ATOM      3  C   ASN A  11      19.350  21.987  15.536  1.00  5.28           C
+SIGATM    3  C   ASN A  11       0.014   0.015   0.018  0.00  0.00           C
+ANISOU    3  C   ASN A  11      496    694    816    259    282     13       C
+ATOM      4  O   ASN A  11      18.467  21.133  15.723  1.00  6.30           O
+SIGATM    4  O   ASN A  11       0.010   0.011   0.012  0.00  0.00           O
+ANISOU    4  O   ASN A  11      693    769    930   -311    560    139       O
+ATOM      5  CB  ASN A  11      19.353  22.589  13.071  1.00  7.21           C
+SIGATM    5  CB  ASN A  11       0.024   0.018   0.020  0.00  0.00           C
+ANISOU    5  CB  ASN A  11     1193    818    730    253    557    346       C
+ATOM      6  CG  ASN A  11      19.229  24.045  13.254  1.00  7.05           C
+SIGATM    6  CG  ASN A  11       0.019   0.019   0.020  0.00  0.00           C
+ANISOU    6  CG  ASN A  11      811    942    927     66    374    190       C
+ATOM      7  OD1 ASN A  11      18.386  24.585  13.966  1.00 10.74           O
+SIGATM    7  OD1 ASN A  11       0.016   0.015   0.020  0.00  0.00           O
+ANISOU    7  OD1 ASN A  11     1219   1213   1647    741    880    604       O
+ATOM      8  ND2 ASN A  11      20.137  24.859  12.638  1.00 11.75           N
+SIGATM    8  ND2 ASN A  11       0.024   0.019   0.023  0.00  0.00           N
+ANISOU    8  ND2 ASN A  11     1615   1163   1688    568   1151    369       N
+ATOM      9  H   ASN A  11      19.593  19.850  14.064  1.00  4.56           H
+SIGATM    9  H   ASN A  11       0.154   0.149   0.157  0.00  0.05           H
+ANISOU    9  H   ASN A  11      577    577    577     -0      0      0       H
+ATOM     10  HA  ASN A  11      21.153  22.393  14.366  1.00  4.44           H
+SIGATM   10  HA  ASN A  11       0.156   0.144   0.164  0.00  0.05           H
+ANISOU   10  HA  ASN A  11      562    562    562     -0      0      0       H
+ATOM     11  HB2 ASN A  11      19.803  22.376  12.109  1.00  5.45           H
+SIGATM   11  HB2 ASN A  11       0.166   0.159   0.188  0.00  0.05           H
+ANISOU   11  HB2 ASN A  11      690    690    690      0      0      0       H
+ATOM     12  HB3 ASN A  11      18.337  22.165  13.044  1.00  5.57           H
+SIGATM   12  HB3 ASN A  11       0.181   0.172   0.190  0.00  0.06           H
+ANISOU   12  HB3 ASN A  11      706    706    706     -0     -0      0       H
+ATOM     13 HD21 ASN A  11      20.095  25.868  12.779  1.00  0.15           H
+ATOM     14 HD22 ASN A  11      20.856  24.457  12.037  1.00  0.15           H
+ATOM     15  N   PRO A  12      19.549  22.974  16.385  1.00  6.02           N
+SIGATM   15  N   PRO A  12       0.013   0.013   0.014  0.00  0.00           N
+ANISOU   15  N   PRO A  12      628    866    792     81    251   -392       N
+ATOM     16  CA  PRO A  12      18.791  23.074  17.636  1.00  7.64           C
+SIGATM   16  CA  PRO A  12       0.020   0.022   0.021  0.00  0.00           C
+ANISOU   16  CA  PRO A  12      872   1107    922    -21    -92   -737       C
+ATOM     17  C   PRO A  12      17.334  23.193  17.478  1.00  8.81           C
+SIGATM   17  C   PRO A  12       0.022   0.025   0.025  0.00  0.00           C
+ANISOU   17  C   PRO A  12      870   1543    935    -49    192   -681       C
+ATOM     18  O   PRO A  12      16.601  22.963  18.398  1.00 16.87           O
+SIGATM   18  O   PRO A  12       0.018   0.031   0.018  0.00  0.00           O
+ANISOU   18  O   PRO A  12     1166   4335    908     75    840    732       O
+ATOM     19  CB  PRO A  12      19.390  24.272  18.328  1.00 12.09           C
+SIGATM   19  CB  PRO A  12       0.032   0.043   0.040  0.00  0.00           C
+ANISOU   19  CB  PRO A  12     1133   2033   1426   -617     -8  -1566       C
+ATOM     20  CG  PRO A  12      20.759  24.278  17.830  1.00 21.34           C
+SIGATM   20  CG  PRO A  12       0.063   0.065   0.055  0.00  0.00           C
+ANISOU   20  CG  PRO A  12     2734   3021   2352  -4415   2197  -3768       C
+ATOM     21  CD  PRO A  12      20.656  23.962  16.355  1.00  9.23           C
+SIGATM   21  CD  PRO A  12       0.023   0.026   0.030  0.00  0.00           C
+ANISOU   21  CD  PRO A  12      789   1058   1661   -511    608   -952       C
+ATOM     22  HA  PRO A  12      18.857  22.156  18.217  1.00  5.57           H
+SIGATM   22  HA  PRO A  12       0.176   0.179   0.185  0.00  0.06           H
+ANISOU   22  HA  PRO A  12      706    706    706     -0     -0      0       H
+ATOM     23  HB2 PRO A  12      18.879  25.176  18.073  1.00  8.95           H
+SIGATM   23  HB2 PRO A  12       0.251   0.236   0.277  0.00  0.10           H
+ANISOU   23  HB2 PRO A  12     1134   1134   1134     -0      0     -0       H
+ATOM     24  HB3 PRO A  12      19.384  24.160  19.397  1.00  8.99           H
+SIGATM   24  HB3 PRO A  12       0.240   0.237   0.266  0.00  0.09           H
+ANISOU   24  HB3 PRO A  12     1138   1138   1138      0      0      0       H
+ATOM     25  HG2 PRO A  12      21.229  25.228  17.984  1.00 13.71           H
+SIGATM   25  HG2 PRO A  12       0.299   0.298   0.322  0.00  0.11           H
+ANISOU   25  HG2 PRO A  12     1736   1736   1736      0      0     -0       H
+ATOM     26  HG3 PRO A  12      21.341  23.539  18.324  1.00 14.88           H
+SIGATM   26  HG3 PRO A  12       0.407   0.350   0.438  0.00  0.22           H
+ANISOU   26  HG3 PRO A  12     1885   1885   1885     -0      0      0       H
+ATOM     27  HD2 PRO A  12      20.427  24.836  15.807  1.00  8.30           H
+SIGATM   27  HD2 PRO A  12       0.225   0.232   0.230  0.00  0.09           H
+ANISOU   27  HD2 PRO A  12     1051   1051   1051     -0      0      0       H
+ATOM     28  HD3 PRO A  12      21.563  23.528  15.976  1.00  7.94           H
+SIGATM   28  HD3 PRO A  12       0.225   0.205   0.219  0.00  0.07           H
+ANISOU   28  HD3 PRO A  12     1006   1006   1006     -0     -0     -0       H
+ATOM     29  N   ALA A  13      16.852  23.762  16.268  1.00  6.12           N
+SIGATM   29  N   ALA A  13       0.013   0.013   0.019  0.00  0.00           N
+ANISOU   29  N   ALA A  13      640    643   1041    289    -79   -566       N
+ATOM     30  CA  ALA A  13      15.412  23.951  16.052  1.00  6.35           C
+SIGATM   30  CA  ALA A  13       0.016   0.014   0.022  0.00  0.00           C
+ANISOU   30  CA  ALA A  13      709    452   1250    205    153   -482       C
+ATOM     31  C   ALA A  13      14.652  22.672  15.793  1.00  6.13           C
+SIGATM   31  C   ALA A  13       0.014   0.015   0.019  0.00  0.00           C
+ANISOU   31  C   ALA A  13      463    820   1046     48    385   -454       C
+ATOM     32  O   ALA A  13      13.446  22.652  15.815  1.00  8.81           O
+SIGATM   32  O   ALA A  13       0.010   0.012   0.017  0.00  0.00           O
+ANISOU   32  O   ALA A  13      501   1073   1773    425   -230   -970       O
+ATOM     33  CB  ALA A  13      15.169  24.900  14.886  1.00  9.70           C
+SIGATM   33  CB  ALA A  13       0.025   0.023   0.037  0.00  0.00           C
+ANISOU   33  CB  ALA A  13      827    842   2018    153   -168    271       C
+ATOM     34  H   ALA A  13      17.392  24.033  15.467  1.00  5.13           H
+SIGATM   34  H   ALA A  13       0.179   0.174   0.192  0.00  0.06           H
+ANISOU   34  H   ALA A  13      650    650    650      0      0     -0       H
+ATOM     35  HA  ALA A  13      15.046  24.346  16.992  1.00  5.67           H
+SIGATM   35  HA  ALA A  13       0.172   0.176   0.192  0.00  0.06           H
+ANISOU   35  HA  ALA A  13      718    718    718     -0     -0     -0       H
+ATOM     36  HB1 ALA A  13      15.728  25.796  15.096  1.00  5.75           H
+SIGATM   36  HB1 ALA A  13       0.173   0.178   0.174  0.00  0.06           H
+ANISOU   36  HB1 ALA A  13      728    728    728     -0      0      0       H
+ATOM     37  HB2 ALA A  13      15.455  24.479  13.929  1.00  5.65           H
+SIGATM   37  HB2 ALA A  13       0.188   0.188   0.198  0.00  0.07           H
+ANISOU   37  HB2 ALA A  13      715    715    715     -0      0      0       H
+ATOM     38  HB3 ALA A  13      14.114  25.142  14.892  1.00  5.65           H
+SIGATM   38  HB3 ALA A  13       0.192   0.169   0.186  0.00  0.06           H
+ANISOU   38  HB3 ALA A  13      715    715    715     -0      0      0       H
+ATOM     39  N   CYS A  14      15.364  21.559  15.616  1.00  5.01           N
+SIGATM   39  N   CYS A  14       0.013   0.011   0.013  0.00  0.00           N
+ANISOU   39  N   CYS A  14      641    555    707    195   -126   -141       N
+ATOM     40  CA  CYS A  14      14.723  20.311  15.406  1.00  4.65           C
+SIGATM   40  CA  CYS A  14       0.014   0.013   0.015  0.00  0.00           C
+ANISOU   40  CA  CYS A  14      672    569    527     27   -197   -232       C
+ATOM     41  C   CYS A  14      14.070  19.835  16.739  1.00  4.23           C
+SIGATM   41  C   CYS A  14       0.012   0.013   0.016  0.00  0.00           C
+ANISOU   41  C   CYS A  14      365    611    632    284   -153      2       C
+ATOM     42  O   CYS A  14      14.582  20.102  17.827  1.00  5.97           O
+SIGATM   42  O   CYS A  14       0.010   0.011   0.011  0.00  0.00           O
+ANISOU   42  O   CYS A  14      640   1018    610   -211     -6    143       O
+ATOM     43  CB  CYS A  14      15.776  19.309  15.030  1.00  5.19           C
+SIGATM   43  CB  CYS A  14       0.016   0.013   0.016  0.00  0.00           C
+ANISOU   43  CB  CYS A  14      725    462    784     47    105    151       C
+ATOM     44  SG  CYS A  14      16.609  19.652  13.458  1.00  5.56           S
+SIGATM   44  SG  CYS A  14       0.004   0.003   0.004  0.00  0.00           S
+ANISOU   44  SG  CYS A  14      842    435    834     -0    680    -36       S
+ATOM     45  H   CYS A  14      16.360  21.419  15.658  1.00  4.29           H
+SIGATM   45  H   CYS A  14       0.160   0.153   0.167  0.00  0.05           H
+ANISOU   45  H   CYS A  14      543    543    543     -0     -0      0       H
+ATOM     46  HA  CYS A  14      13.992  20.438  14.622  1.00  3.77           H
+SIGATM   46  HA  CYS A  14       0.143   0.143   0.158  0.00  0.04           H
+ANISOU   46  HA  CYS A  14      478    478    478     -0      0      0       H
+ATOM     47  HB2 CYS A  14      16.496  19.253  15.822  1.00  4.15           H
+SIGATM   47  HB2 CYS A  14       0.150   0.145   0.157  0.00  0.05           H
+ANISOU   47  HB2 CYS A  14      526    526    526     -0     -0      0       H
+ATOM     48  HB3 CYS A  14      15.284  18.348  14.958  1.00  3.98           H
+SIGATM   48  HB3 CYS A  14       0.140   0.147   0.145  0.00  0.04           H
+ANISOU   48  HB3 CYS A  14      504    504    504     -0      0      0       H
+ATOM         HG  CYS A  14      17.678  19.158  13.225  1.00  5.56           H
+ATOM     49  N   CYS A  17      15.707  18.632  20.351  1.00  4.66           N
+SIGATM   49  N   CYS A  17       0.011   0.012   0.013  0.00  0.00           N
+ANISOU   49  N   CYS A  17      501    652    618    328    -39     61       N
+ATOM     50  CA  CYS A  17      17.117  18.912  20.228  1.00  5.05           C
+SIGATM   50  CA  CYS A  17       0.015   0.014   0.016  0.00  0.00           C
+ANISOU   50  CA  CYS A  17      526    683    708    228    175     31       C
+ATOM     51  C   CYS A  17      17.509  20.236  20.968  1.00  6.06           C
+SIGATM   51  C   CYS A  17       0.015   0.017   0.019  0.00  0.00           C
+ANISOU   51  C   CYS A  17      454    892    958   -126   -126    -83       C
+ATOM     52  O   CYS A  17      18.642  20.643  20.765  1.00  9.21           O
+SIGATM   52  O   CYS A  17       0.013   0.013   0.016  0.00  0.00           O
+ANISOU   52  O   CYS A  17      871   1144   1483   -544    280   -648       O
+ATOM     53  CB  CYS A  17      17.538  18.981  18.761  1.00  5.11           C
+SIGATM   53  CB  CYS A  17       0.014   0.014   0.017  0.00  0.00           C
+ANISOU   53  CB  CYS A  17      479    560    904    -52    137    -19       C
+ATOM     54  SG  CYS A  17      17.165  17.463  17.875  1.00  5.20           S
+SIGATM   54  SG  CYS A  17       0.003   0.004   0.004  0.00  0.00           S
+ANISOU   54  SG  CYS A  17      376    851    750     78      6   -172       S
+ATOM     55  OXT CYS A  17      16.701  20.762  21.714  1.00 10.99           O
+SIGATM   55  OXT CYS A  17       0.013   0.017   0.018  0.00  0.00           O
+ANISOU   55  OXT CYS A  17      853   1579   1744   -439    768  -1657       O
+ATOM     56  H   CYS A  17      15.335  19.101  19.542  1.00  4.60           H
+SIGATM   56  H   CYS A  17       0.155   0.151   0.159  0.00  0.05           H
+ANISOU   56  H   CYS A  17      582    582    582     -0      0      0       H
+ATOM     57  HA  CYS A  17      18.187  18.839  20.377  1.00  4.41           H
+SIGATM   57  HA  CYS A  17       0.156   0.149   0.164  0.00  0.05           H
+ANISOU   57  HA  CYS A  17      558    558    558     -0      0      0       H
+ATOM     58  HB2 CYS A  17      17.007  19.801  18.280  1.00  4.44           H
+SIGATM   58  HB2 CYS A  17       0.153   0.153   0.158  0.00  0.05           H
+ANISOU   58  HB2 CYS A  17      562    562    562     -0      0      0       H
+ATOM     59  HB3 CYS A  17      18.600  19.174  18.702  1.00  4.41           H
+SIGATM   59  HB3 CYS A  17       0.149   0.144   0.157  0.00  0.05           H
+ANISOU   59  HB3 CYS A  17      559    559    559     -0      0      0       H
+ATOM         HG  CYS A  17      17.094  17.469  16.677  1.00  5.20           H
+TER
+ATOM         H2  ASN A  11      20.539  20.410  13.052  1.00  4.88           H
+ATOM         HC  CYS A  14      13.223  19.304  16.719  1.00  4.23           H
+ATOM         H2  CYS A  17      15.575  17.742  20.337  1.00  4.66           H
+TER
+END

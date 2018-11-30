@@ -1,0 +1,66 @@
+REMARK charge= 0 
+CRYST1   38.479   51.010   34.237  90.00  90.00  90.00 P 1
+SCALE1      0.025988  0.000000  0.000000        0.00000
+SCALE2      0.000000  0.019604  0.000000        0.00000
+SCALE3      0.000000  0.000000  0.029208        0.00000
+ATOM      1  N   GLY B   2      20.533  40.142  19.786  1.00  5.62           N
+ANISOU    1  N   GLY B   2      748    357   1029     18    291     18       N
+ATOM      2  CA  GLY B   2      21.000  39.091  18.889  1.00  5.53           C
+ANISOU    2  CA  GLY B   2      578    294   1228    -55    179     -4       C
+ATOM      3  C   GLY B   2      20.036  38.839  17.751  1.00  5.60           C
+ANISOU    3  C   GLY B   2      611    398   1119     28    123     55       C
+ATOM      4  O   GLY B   2      19.446  39.769  17.197  1.00  6.87           O
+ANISOU    4  O   GLY B   2      965    394   1250    140    107     61       O
+ATOM      5  H   GLY B   2      21.062  41.010  19.869  1.00  6.74           H
+ANISOU    5  H   GLY B   2      854    854    854      0     -0     -0       H
+ATOM      6  HA2 GLY B   2      21.970  39.374  18.480  1.00  6.63           H
+ANISOU    6  HA2 GLY B   2      840    840    840      0     -0     -0       H
+ATOM      7  HA3 GLY B   2      21.132  38.169  19.456  1.00  6.63           H
+ANISOU    7  HA3 GLY B   2      840    840    840      0     -0     -0       H
+ATOM      8  N   ALA B   3      19.987  37.561  17.332  1.00  5.48           N
+ANISOU    8  N   ALA B   3      547    368   1168     23     46     85       N
+ATOM      9  CA  ALA B   3      19.191  37.204  16.157  1.00  6.39           C
+ANISOU    9  CA  ALA B   3      762    456   1209     52     44     38       C
+ATOM     10  C   ALA B   3      18.466  35.889  16.375  1.00  5.62           C
+ANISOU   10  C   ALA B   3      545    476   1116    131     35     61       C
+ATOM     11  O   ALA B   3      19.109  34.873  16.601  1.00  9.16           O
+ANISOU   11  O   ALA B   3      705    401   2374      9   -439    116       O
+ATOM     12  CB  ALA B   3      20.074  37.084  14.915  1.00  8.54           C
+ANISOU   12  CB  ALA B   3     1069    745   1429   -376    357   -276       C
+ATOM     13  H   ALA B   3      20.435  36.939  17.764  1.00  6.58           H
+ANISOU   13  H   ALA B   3      833    833    833     -0      0     -0       H
+ATOM     14  HA  ALA B   3      18.512  37.921  16.001  1.00  7.66           H
+ANISOU   14  HA  ALA B   3      970    970    970      0     -0     -0       H
+ATOM     15  HB1 ALA B   3      20.720  36.359  15.042  1.00 12.80           H
+ANISOU   15  HB1 ALA B   3     1621   1621   1621      0      0     -0       H
+ATOM     16  HB2 ALA B   3      19.514  36.890  14.134  1.00 12.80           H
+ANISOU   16  HB2 ALA B   3     1621   1621   1621      0      0     -0       H
+ATOM     17  HB3 ALA B   3      20.552  37.927  14.772  1.00 12.80           H
+ANISOU   17  HB3 ALA B   3     1621   1621   1621      0      0     -0       H
+ATOM     18  N   ALA B   5      15.621  33.200  17.881  1.00  4.39           N
+ANISOU   18  N   ALA B   5      635    402    631     26      1     72       N
+ATOM     19  CA  ALA B   5      14.823  32.776  19.029  1.00  5.00           C
+ANISOU   19  CA  ALA B   5      753    485    662    -32     88    -17       C
+ATOM     20  C   ALA B   5      15.441  31.503  19.596  1.00  4.74           C
+ANISOU   20  C   ALA B   5      913    407    482    -58    109    -27       C
+ATOM     21  O   ALA B   5      14.975  30.407  19.242  1.00  6.36           O
+ANISOU   21  O   ALA B   5     1172    468    777   -210    -93     24       O
+ATOM     22  CB  ALA B   5      13.385  32.551  18.643  1.00  6.16           C
+ANISOU   22  CB  ALA B   5      773    539   1029   -119    160    192       C
+ATOM     23  H   ALA B   5      16.108  32.602  17.457  1.00  5.27           H
+ANISOU   23  H   ALA B   5      667    667    667      0      0      0       H
+ATOM     24  HA  ALA B   5      14.860  33.490  19.729  1.00  6.00           H
+ANISOU   24  HA  ALA B   5      760    760    760      0      0     -0       H
+ATOM     25  HB1 ALA B   5      13.336  31.851  17.959  1.00  9.24           H
+ANISOU   25  HB1 ALA B   5     1170   1170   1170      0      0      0       H
+ATOM     26  HB2 ALA B   5      12.875  32.273  19.432  1.00  9.24           H
+ANISOU   26  HB2 ALA B   5     1170   1170   1170      0      0      0       H
+ATOM     27  HB3 ALA B   5      13.009  33.383  18.287  1.00  9.24           H
+ANISOU   27  HB3 ALA B   5     1170   1170   1170      0      0      0       H
+TER
+ATOM         H2  GLY B   2      19.712  40.410  19.533  1.00  5.62           H
+ATOM         HC  ALA B   3      17.467  35.856  16.334  1.00  5.62           H
+ATOM         H2  ALA B   5      15.079  33.540  17.248  1.00  4.39           H
+ATOM         HC  ALA B   5      16.205  31.561  20.239  1.00  4.74           H
+TER
+END

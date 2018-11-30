@@ -1,0 +1,123 @@
+REMARK charge= 0 
+CRYST1   87.841   63.838   49.661  90.00  90.00  90.00 P 1
+SCALE1      0.011384  0.000000  0.000000        0.00000
+SCALE2      0.000000  0.015665  0.000000        0.00000
+SCALE3      0.000000  0.000000  0.020137        0.00000
+ATOM      1  N   ASN B  24      65.090  14.578  26.720  1.00  3.71           N
+ANISOU    1  N   ASN B  24      639    264    505      8   -192     -7       N
+ATOM      2  CA  ASN B  24      63.639  14.524  26.738  1.00  3.98           C
+ANISOU    2  CA  ASN B  24      595    288    629     15   -212     -7       C
+ATOM      3  C   ASN B  24      63.002  15.840  27.158  1.00  4.02           C
+ANISOU    3  C   ASN B  24      648    329    551     14   -179     19       C
+ATOM      4  O   ASN B  24      61.759  15.949  27.136  1.00  4.45           O
+ANISOU    4  O   ASN B  24      642    320    727     -1   -187    -11       O
+ATOM      5  CB  ASN B  24      63.119  13.361  27.573  1.00  4.34           C
+ANISOU    5  CB  ASN B  24      618    310    720     -6   -170      4       C
+ATOM      6  CG  ASN B  24      63.185  13.548  29.064  1.00  4.53           C
+ANISOU    6  CG  ASN B  24      619    361    743     17    -60     53       C
+ATOM      7  OD1 ASN B  24      63.025  14.666  29.603  1.00  5.33           O
+ANISOU    7  OD1 ASN B  24      921    408    697     90    -84     25       O
+ATOM      8  ND2 ASN B  24      63.347  12.432  29.787  1.00  5.12           N
+ANISOU    8  ND2 ASN B  24      761    432    754     18   -119    134       N
+ATOM      9  H   ASN B  24      65.540  14.349  27.441  1.00  4.45           H
+ANISOU    9  H   ASN B  24      564    564    564     -0      0      0       H
+ATOM     10  HA  ASN B  24      63.348  14.353  25.797  1.00  4.78           H
+ANISOU   10  HA  ASN B  24      605    605    605     -0      0      0       H
+ATOM     11  HB2 ASN B  24      62.177  13.192  27.321  1.00  5.21           H
+ANISOU   11  HB2 ASN B  24      660    660    660     -0      0      0       H
+ATOM     12  HB3 ASN B  24      63.638  12.551  27.337  1.00  5.21           H
+ANISOU   12  HB3 ASN B  24      660    660    660     -0      0      0       H
+ATOM     13 HD21 ASN B  24      63.458  11.658  29.384  1.00  6.15           H
+ANISOU   13 HD21 ASN B  24      779    779    779      0      0      0       H
+ATOM     14 HD22 ASN B  24      63.342  12.473  30.666  1.00  6.15           H
+ANISOU   14 HD22 ASN B  24      779    779    779      0      0      0       H
+ATOM     15  N   CYS B  26      62.455  18.972  26.064  1.00  3.82           N
+ANISOU   15  N   CYS B  26      631    302    520     -8   -195    -16       N
+ATOM     16  CA  CYS B  26      61.437  19.652  25.278  1.00  4.02           C
+ANISOU   16  CA  CYS B  26      585    326    616     -7   -248    -37       C
+ATOM     17  C   CYS B  26      60.181  18.785  25.099  1.00  4.27           C
+ANISOU   17  C   CYS B  26      664    362    595    -16   -260     34       C
+ATOM     18  O   CYS B  26      59.068  19.291  25.144  1.00  5.00           O
+ANISOU   18  O   CYS B  26      616    515    770      7   -253    101       O
+ATOM     19  CB  CYS B  26      61.978  20.029  23.900  1.00  4.23           C
+ANISOU   19  CB  CYS B  26      677    366    566     -6   -255    -10       C
+ATOM     20  SG  CYS B  26      63.297  21.276  23.968  1.00  4.22           S
+ANISOU   20  SG  CYS B  26      643    353    609    -22   -221      3       S
+ATOM     21  H   CYS B  26      63.228  18.749  25.708  1.00  4.59           H
+ANISOU   21  H   CYS B  26      581    581    581      0      0      0       H
+ATOM     22  HA  CYS B  26      61.176  20.491  25.756  1.00  4.82           H
+ANISOU   22  HA  CYS B  26      610    610    610      0      0      0       H
+ATOM     23  HB2 CYS B  26      62.328  19.215  23.458  1.00  5.08           H
+ANISOU   23  HB2 CYS B  26      643    643    643     -0      0      0       H
+ATOM     24  HB3 CYS B  26      61.235  20.378  23.347  1.00  5.08           H
+ANISOU   24  HB3 CYS B  26      643    643    643     -0      0      0       H
+ATOM         HG  CYS B  26      64.049  21.405  23.042  1.00  4.22           H
+ATOM     25  N   ASN B  27      60.384  17.482  24.877  1.00  4.66           N
+ANISOU   25  N   ASN B  27      732    390    647    -41   -263     13       N
+ATOM     26  CA  ASN B  27      59.246  16.607  24.733  1.00  5.33           C
+ANISOU   26  CA  ASN B  27      812    512    702   -139   -298    -26       C
+ATOM     27  C   ASN B  27      58.302  16.714  25.933  1.00  5.80           C
+ANISOU   27  C   ASN B  27      778    593    833   -171   -294    112       C
+ATOM     28  O   ASN B  27      57.096  16.690  25.795  1.00  8.52           O
+ANISOU   28  O   ASN B  27      781   1472    986   -345   -294    297       O
+ATOM     29  CB  ASN B  27      59.697  15.162  24.468  1.00  5.85           C
+ANISOU   29  CB  ASN B  27      996    513    713   -141   -319     97       C
+ATOM     30  CG  ASN B  27      60.172  14.977  23.024  1.00  5.43           C
+ANISOU   30  CG  ASN B  27      926    402    736   -122   -313      3       C
+ATOM     31  OD1 ASN B  27      59.692  15.678  22.160  1.00  6.14           O
+ANISOU   31  OD1 ASN B  27     1013    618    703     86   -306     56       O
+ATOM     32  ND2 ASN B  27      61.077  14.027  22.779  1.00  6.23           N
+ANISOU   32  ND2 ASN B  27     1099    424    843     31   -339     37       N
+ATOM     33  H   ASN B  27      61.201  17.162  24.819  1.00  5.59           H
+ANISOU   33  H   ASN B  27      708    708    708     -0     -0      0       H
+ATOM     34  HA  ASN B  27      58.737  16.912  23.928  1.00  6.40           H
+ANISOU   34  HA  ASN B  27      811    811    811     -0      0      0       H
+ATOM     35  HB2 ASN B  27      60.435  14.930  25.087  1.00  7.02           H
+ANISOU   35  HB2 ASN B  27      889    889    889      0     -0      0       H
+ATOM     36  HB3 ASN B  27      58.944  14.545  24.647  1.00  7.02           H
+ANISOU   36  HB3 ASN B  27      889    889    889      0     -0      0       H
+ATOM     37 HD21 ASN B  27      61.396  13.543  23.441  1.00  7.47           H
+ANISOU   37 HD21 ASN B  27      946    946    946     -0     -0     -0       H
+ATOM     38 HD22 ASN B  27      61.354  13.885  21.957  1.00  7.47           H
+ANISOU   38 HD22 ASN B  27      946    946    946     -0     -0     -0       H
+ATOM     39  N   GLN B  28      58.878  16.809  27.157  1.00  5.00           N
+ANISOU   39  N   GLN B  28      725    399    775    -64   -221     23       N
+ATOM     40  CA  GLN B  28      58.077  16.927  28.333  1.00  5.21           C
+ANISOU   40  CA  GLN B  28      714    393    873    -73   -169    100       C
+ATOM     41  C   GLN B  28      57.561  18.355  28.606  1.00  5.06           C
+ANISOU   41  C   GLN B  28      648    491    784    -30   -182     39       C
+ATOM     42  O   GLN B  28      56.409  18.557  28.983  1.00  6.53           O
+ANISOU   42  O   GLN B  28      718    551   1214    -60    -54    148       O
+ATOM     43  CB  GLN B  28      58.831  16.455  29.592  1.00  5.43           C
+ANISOU   43  CB  GLN B  28      801    484    778     22   -145     52       C
+ATOM     44  CG  GLN B  28      59.223  14.972  29.519  1.00  6.04           C
+ANISOU   44  CG  GLN B  28     1038    386    872     44    -49     39       C
+ATOM     45  CD  GLN B  28      59.416  14.427  30.927  1.00  6.37           C
+ANISOU   45  CD  GLN B  28      917    525    980    113     82    116       C
+ATOM     46  OE1 GLN B  28      58.434  14.260  31.642  1.00  7.91           O
+ANISOU   46  OE1 GLN B  28     1068    755   1184     84    268    213       O
+ATOM     47  NE2 GLN B  28      60.648  14.160  31.322  1.00  7.07           N
+ANISOU   47  NE2 GLN B  28     1060    782    843    209     66    150       N
+ATOM     48  H   GLN B  28      59.755  16.797  27.227  1.00  6.00           H
+ANISOU   48  H   GLN B  28      760    760    760      0      0      0       H
+ATOM     49  HA  GLN B  28      57.280  16.334  28.217  1.00  6.25           H
+ANISOU   49  HA  GLN B  28      792    792    792     -0     -0      0       H
+ATOM     50  HB2 GLN B  28      59.649  17.001  29.704  1.00  6.51           H
+ANISOU   50  HB2 GLN B  28      825    825    825      0     -0      0       H
+ATOM     51  HB3 GLN B  28      58.258  16.600  30.387  1.00  6.51           H
+ANISOU   51  HB3 GLN B  28      825    825    825      0     -0      0       H
+ATOM     52  HG2 GLN B  28      58.512  14.460  29.057  1.00  7.25           H
+ANISOU   52  HG2 GLN B  28      918    918    918      0      0      0       H
+ATOM     53  HG3 GLN B  28      60.061  14.872  29.003  1.00  7.25           H
+ANISOU   53  HG3 GLN B  28      918    918    918      0      0      0       H
+ATOM     54 HE21 GLN B  28      61.324  14.295  30.775  1.00  8.48           H
+ANISOU   54 HE21 GLN B  28     1074   1074   1074     -0      0      0       H
+ATOM     55 HE22 GLN B  28      60.792  13.847  32.132  1.00  8.48           H
+ANISOU   55 HE22 GLN B  28     1074   1074   1074     -0      0      0       H
+TER
+ATOM         H2  ASN B  24      65.403  14.029  26.079  1.00  3.71           H
+ATOM         HC  ASN B  24      63.578  16.605  27.447  1.00  4.02           H
+ATOM         H2  CYS B  26      62.688  19.487  26.764  1.00  3.82           H
+ATOM         HC  GLN B  28      58.168  19.139  28.477  1.00  5.06           H
+TER
+END

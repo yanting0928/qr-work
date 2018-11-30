@@ -1,0 +1,161 @@
+REMARK charge= -1 
+CRYST1   47.877   43.097   48.664  90.00  90.00  90.00 P 1
+SCALE1      0.020887  0.000000  0.000000        0.00000
+SCALE2      0.000000  0.023203  0.000000        0.00000
+SCALE3      0.000000  0.000000  0.020549        0.00000
+ATOM      1  N   PHE A  13      23.418  26.315  18.955  1.00  4.37           N
+ANISOU    1  N   PHE A  13      439    591    632    -75    -30     51       N
+ATOM      2  CA  PHE A  13      22.457  25.427  19.600  1.00  4.50           C
+ANISOU    2  CA  PHE A  13      469    585    654    -33    -56     77       C
+ATOM      3  C   PHE A  13      21.172  26.185  19.959  1.00  4.35           C
+ANISOU    3  C   PHE A  13      480    559    614    -23    -52     91       C
+ATOM      4  O   PHE A  13      20.056  25.703  19.736  1.00  4.70           O
+ANISOU    4  O   PHE A  13      487    630    668   -109    -58     65       O
+ATOM      5  CB  PHE A  13      23.095  24.795  20.848  1.00  5.12           C
+ANISOU    5  CB  PHE A  13      548    649    747    -78    -73    173       C
+ATOM      6  CG  PHE A  13      22.236  23.760  21.520  1.00  5.82           C
+ANISOU    6  CG  PHE A  13      691    740    780    -60    -81    226       C
+ATOM      7  CD1 PHE A  13      21.327  24.109  22.502  1.00  7.30           C
+ANISOU    7  CD1 PHE A  13      797   1124    851     18     20    294       C
+ATOM      8  CD2 PHE A  13      22.358  22.421  21.171  1.00  7.02           C
+ANISOU    8  CD2 PHE A  13     1009    823    837   -185   -151    197       C
+ATOM      9  CE1 PHE A  13      20.541  23.129  23.113  1.00  8.62           C
+ANISOU    9  CE1 PHE A  13      979   1390    907    -38     -9    326       C
+ATOM     10  CE2 PHE A  13      21.580  21.450  21.776  1.00  8.22           C
+ANISOU   10  CE2 PHE A  13     1214   1016    893   -295   -188    270       C
+ATOM     11  CZ  PHE A  13      20.681  21.808  22.746  1.00  8.43           C
+ANISOU   11  CZ  PHE A  13     1053   1235    916   -296   -154    340       C
+ATOM     12  H   PHE A  13      24.167  26.382  19.373  1.00  5.25           H
+ANISOU   12  H   PHE A  13      665    665    665     -0     -0      0       H
+ATOM     13  HA  PHE A  13      22.221  24.705  18.981  1.00  5.39           H
+ANISOU   13  HA  PHE A  13      683    683    683      0     -0      0       H
+ATOM     14  HB2 PHE A  13      23.926  24.366  20.590  1.00  6.13           H
+ANISOU   14  HB2 PHE A  13      777    777    777     -0     -0      0       H
+ATOM     15  HB3 PHE A  13      23.274  25.495  21.495  1.00  6.13           H
+ANISOU   15  HB3 PHE A  13      777    777    777     -0     -0      0       H
+ATOM     16  HD1 PHE A  13      21.233  25.000  22.750  1.00  8.75           H
+ANISOU   16  HD1 PHE A  13     1108   1108   1108      0      0     -0       H
+ATOM     17  HD2 PHE A  13      22.967  22.175  20.513  1.00  8.43           H
+ANISOU   17  HD2 PHE A  13     1068   1068   1068     -0      0      0       H
+ATOM     18  HE1 PHE A  13      19.929  23.367  23.772  1.00 10.35           H
+ANISOU   18  HE1 PHE A  13     1311   1311   1311     -0     -0     -0       H
+ATOM     19  HE2 PHE A  13      21.671  20.558  21.529  1.00  9.86           H
+ANISOU   19  HE2 PHE A  13     1249   1249   1249      0     -0      0       H
+ATOM     20  HZ  PHE A  13      20.157  21.157  23.153  1.00 10.12           H
+ANISOU   20  HZ  PHE A  13     1282   1282   1282     -0     -0      0       H
+ATOM     21  N   SER A  22      14.254  19.063  18.515  1.00  4.57           N
+ANISOU   21  N   SER A  22      594    482    661      7    -42     32       N
+ATOM     22  CA  SER A  22      14.707  18.270  19.650  1.00  5.30           C
+ANISOU   22  CA  SER A  22      695    586    731      6    -19    117       C
+ATOM     23  C   SER A  22      16.171  18.546  19.973  1.00  4.77           C
+ANISOU   23  C   SER A  22      582    560    669     34     31     98       C
+ATOM     24  O   SER A  22      17.005  18.760  19.083  1.00  5.44           O
+ANISOU   24  O   SER A  22      602    786    679     59     46    138       O
+ATOM     25  CB  SER A  22      14.537  16.785  19.378  1.00  6.81           C
+ANISOU   25  CB  SER A  22      992    727    867    -20    -69    174       C
+ATOM     26  OG  SER A  22      15.428  16.390  18.347  1.00  8.38           O
+ANISOU   26  OG  SER A  22     1210    988    986     -5    -64    112       O
+ATOM     27  H   SER A  22      13.858  18.526  17.744  1.00  4.57           H
+ATOM     28  HA  SER A  22      14.171  18.500  20.438  1.00  6.36           H
+ANISOU   28  HA  SER A  22      805    805    805      0     -0      0       H
+ATOM     29  HB2 SER A  22      14.740  16.286  20.185  1.00  8.17           H
+ANISOU   29  HB2 SER A  22     1035   1035   1035      0      0      0       H
+ATOM     30  HB3 SER A  22      13.625  16.613  19.096  1.00  8.17           H
+ANISOU   30  HB3 SER A  22     1035   1035   1035      0      0      0       H
+ATOM     31  HG  SER A  22      15.327  15.432  18.165  1.00 10.05           H
+ANISOU   31  HG  SER A  22     1273   1273   1273      0      0      0       H
+ATOM     32  N   GLU A  23      16.490  18.472  21.259  1.00  4.76           N
+ANISOU   32  N   GLU A  23      558    607    642     79     39     69       N
+ATOM     33  CA  GLU A  23      17.857  18.649  21.699  1.00  4.89           C
+ANISOU   33  CA  GLU A  23      576    620    663     31     42     45       C
+ATOM     34  C   GLU A  23      18.818  17.674  21.011  1.00  4.66           C
+ANISOU   34  C   GLU A  23      509    598    663      8     21     49       C
+ATOM     35  O   GLU A  23      19.943  18.055  20.681  1.00  5.42           O
+ANISOU   35  O   GLU A  23      569    765    725    -40     72    -21       O
+ATOM     36  CB  GLU A  23      17.997  18.514  23.214  1.00  5.50           C
+ANISOU   36  CB  GLU A  23      704    714    673     67     49    -35       C
+ATOM     37  CG  GLU A  23      17.351  19.647  24.011  1.00  6.66           C
+ANISOU   37  CG  GLU A  23      912    897    722     84     77   -127       C
+ATOM     38  CD  GLU A  23      17.680  19.610  25.492  1.00  8.61           C
+ANISOU   38  CD  GLU A  23     1240   1236    795    145     37   -141       C
+ATOM     39  OE1 GLU A  23      17.966  18.533  26.021  1.00  9.67           O
+ANISOU   39  OE1 GLU A  23     1458   1415    801    150      1    -16       O
+ATOM     40  OE2 GLU A  23      17.603  20.667  26.146  1.00 10.14           O
+ANISOU   40  OE2 GLU A  23     1524   1449    878    126    -44   -227       O
+ATOM     41  H   GLU A  23      15.930  18.321  21.894  1.00  5.71           H
+ANISOU   41  H   GLU A  23      723    723    723     -0      0      0       H
+ATOM     42  HA  GLU A  23      18.141  19.556  21.459  1.00  5.87           H
+ANISOU   42  HA  GLU A  23      743    743    743      0     -0     -0       H
+ATOM     43  HB2 GLU A  23      17.580  17.684  23.492  1.00  6.60           H
+ANISOU   43  HB2 GLU A  23      836    836    836     -0      0      0       H
+ATOM     44  HB3 GLU A  23      18.941  18.497  23.439  1.00  6.60           H
+ANISOU   44  HB3 GLU A  23      836    836    836     -0      0      0       H
+ATOM     45  HG2 GLU A  23      17.662  20.496  23.658  1.00  8.00           H
+ANISOU   45  HG2 GLU A  23     1013   1013   1013      0     -0      0       H
+ATOM     46  HG3 GLU A  23      16.387  19.585  23.919  1.00  8.00           H
+ANISOU   46  HG3 GLU A  23     1013   1013   1013      0     -0      0       H
+ATOM     47  N   ALA A  24      18.395  16.425  20.801  1.00  4.85           N
+ANISOU   47  N   ALA A  24      551    614    679     31     34     65       N
+ATOM     48  CA  ALA A  24      19.300  15.431  20.226  1.00  5.12           C
+ANISOU   48  CA  ALA A  24      659    547    738     54     48     91       C
+ATOM     49  C   ALA A  24      19.739  15.797  18.802  1.00  4.57           C
+ANISOU   49  C   ALA A  24      574    482    682     38    -18     30       C
+ATOM     50  O   ALA A  24      20.885  15.542  18.416  1.00  5.51           O
+ANISOU   50  O   ALA A  24      643    726    724    126     19     56       O
+ATOM     51  CB  ALA A  24      18.649  14.045  20.262  1.00  6.28           C
+ANISOU   51  CB  ALA A  24      908    617    863     37    116    138       C
+ATOM     52  H   ALA A  24      17.606  16.134  20.980  1.00  5.83           H
+ANISOU   52  H   ALA A  24      738    738    738     -0     -0      0       H
+ATOM     53  HA  ALA A  24      20.107  15.390  20.780  1.00  6.14           H
+ANISOU   53  HA  ALA A  24      778    778    778      0      0      0       H
+ATOM     54  HB1 ALA A  24      19.256  13.405  19.882  1.00  7.54           H
+ANISOU   54  HB1 ALA A  24      955    955    955     -0      0      0       H
+ATOM     55  HB2 ALA A  24      18.459  13.813  21.174  1.00  7.54           H
+ANISOU   55  HB2 ALA A  24      955    955    955     -0      0      0       H
+ATOM     56  HB3 ALA A  24      17.836  14.069  19.753  1.00  7.54           H
+ANISOU   56  HB3 ALA A  24      955    955    955     -0      0      0       H
+ATOM     57  N   ILE A  25      18.834  16.359  18.002  1.00  4.36           N
+ANISOU   57  N   ILE A  25      520    465    672     33    -18      2       N
+ATOM     58  CA  ILE A  25      19.196  16.800  16.658  1.00  4.45           C
+ANISOU   58  CA  ILE A  25      533    529    630     -6    -50     -5       C
+ATOM     59  C   ILE A  25      20.065  18.072  16.709  1.00  4.39           C
+ANISOU   59  C   ILE A  25      478    580    609     -1    -12    -14       C
+ATOM     60  O   ILE A  25      21.017  18.218  15.945  1.00  5.13           O
+ANISOU   60  O   ILE A  25      566    725    660    -65     86    -77       O
+ATOM     61  CB  ILE A  25      17.936  17.022  15.785  1.00  5.31           C
+ANISOU   61  CB  ILE A  25      686    685    646      1   -119     -9       C
+ATOM     62  CG1 ILE A  25      17.369  15.682  15.327  1.00  6.13           C
+ANISOU   62  CG1 ILE A  25      865    783    682    -74   -104    -37       C
+ATOM     63  CG2 ILE A  25      18.240  17.838  14.545  1.00  5.86           C
+ANISOU   63  CG2 ILE A  25      771    793    664      1   -118      1       C
+ATOM     64  CD1 ILE A  25      18.200  15.002  14.256  1.00  6.88           C
+ANISOU   64  CD1 ILE A  25     1021    891    703    -65    -52    -65       C
+ATOM     65  H   ILE A  25      18.012  16.495  18.212  1.00  5.23           H
+ANISOU   65  H   ILE A  25      663    663    663      0     -0      0       H
+ATOM     66  HA  ILE A  25      19.729  16.096  16.233  1.00  5.35           H
+ANISOU   66  HA  ILE A  25      677    677    677     -0     -0      0       H
+ATOM     67  HB  ILE A  25      17.265  17.485  16.311  1.00  6.37           H
+ANISOU   67  HB  ILE A  25      807    807    807      0     -0      0       H
+ATOM     68 HG12 ILE A  25      17.322  15.084  16.090  1.00  7.36           H
+ANISOU   68 HG12 ILE A  25      932    932    932     -0     -0      0       H
+ATOM     69 HG13 ILE A  25      16.480  15.825  14.967  1.00  7.36           H
+ANISOU   69 HG13 ILE A  25      932    932    932     -0     -0      0       H
+ATOM     70 HG21 ILE A  25      17.432  17.948  14.038  1.00  7.04           H
+ANISOU   70 HG21 ILE A  25      891    891    891      0     -0      0       H
+ATOM     71 HG22 ILE A  25      18.579  18.695  14.811  1.00  7.04           H
+ANISOU   71 HG22 ILE A  25      891    891    891      0     -0      0       H
+ATOM     72 HG23 ILE A  25      18.895  17.374  14.020  1.00  7.04           H
+ANISOU   72 HG23 ILE A  25      891    891    891      0     -0      0       H
+ATOM     73 HD11 ILE A  25      17.784  14.170  14.019  1.00  8.26           H
+ANISOU   73 HD11 ILE A  25     1046   1046   1046     -0     -0      0       H
+ATOM     74 HD12 ILE A  25      18.247  15.575  13.487  1.00  8.26           H
+ANISOU   74 HD12 ILE A  25     1046   1046   1046     -0     -0      0       H
+ATOM     75 HD13 ILE A  25      19.082  14.842  14.600  1.00  8.26           H
+ANISOU   75 HD13 ILE A  25     1046   1046   1046     -0     -0      0       H
+TER
+ATOM         H2  PHE A  13      23.601  26.010  18.128  1.00  4.37           H
+ATOM         HC  PHE A  13      21.227  27.089  20.383  1.00  4.35           H
+ATOM         H2  SER A  22      13.614  19.636  18.785  1.00  4.57           H
+ATOM         HC  ILE A  25      19.858  18.793  17.370  1.00  4.39           H
+TER
+END
