@@ -118,6 +118,9 @@ def run(file_name,
   if(resolution is not None and resolution <= d_min):
     if(data_type in ["X-RAY DIFFRACTION","NEUTRON DIFFRACTION"]):
       pdb_hierarchy = pdb_inp.construct_hierarchy()
+      xray_structure = pdb_hierarchy.extract_xray_structure()
+      xray_structure.convert_to_isotropic()
+      pdb_hierarchy.adopt_xray_structure(xray_structure)
       if(filter_non_protein):
         pdb_hierarchy = keep_protein_only(pdb_hierarchy = pdb_hierarchy)
       if(pdb_hierarchy is not None):
