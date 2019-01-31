@@ -59,17 +59,21 @@ def move(ref,rg):
 def run(pdb_file_name,data_file_name):
   pdb_code = os.path.basename(pdb_file_name)[3:7]
   pdb_inp = iotbx.pdb.input(file_name = pdb_file_name)
-  crystal_symmetry = pdb_inp.crystal_symmetry()
-  get_r(crystal_symmetry=crystal_symmetry,reflection_files=data_file_name,
-        pdb_inp=pdb_inp)
-  pdb_hierarchy = pdb_inp.construct_hierarchy()
-  for model in pdb_hierarchy.models():
-    for chain in model.chains():
-      for residue_group in chain.residue_groups():
-        for conformer  in residue_group.conformers():
-          for residue in conformer.residues():
-            if (residue.resname == "ARG"):
-              print residue.resname
+  resolution = pdb_inp.resolution()
+  d_min = 0.9
+  if (resolution is not None and resolution <= d_min):
+    print resolution
+    crystal_symmetry = pdb_inp.crystal_symmetry()
+    get_r(crystal_symmetry=crystal_symmetry,reflection_files=data_file_name,
+          pdb_inp=pdb_inp)
+    pdb_hierarchy = pdb_inp.construct_hierarchy()
+    for model in pdb_hierarchy.models():
+      for chain in model.chains():
+        for residue_group in chain.residue_groups():
+          for conformer  in residue_group.conformers():
+            for residue in conformer.residues():
+              if (residue.resname == "ARG"):
+                print residue.resname
                             
          
 if __name__ == '__main__':
