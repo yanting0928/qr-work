@@ -5,14 +5,11 @@ import iotbx.pdb
 from iotbx import reflection_file_utils
 from cStringIO import StringIO
 import mmtbx
-import time
 import os
 import sys
-import libtbx
 from scitbx.math import superpose
 from libtbx.utils import null_out
 from iotbx.file_reader import any_file
-from libtbx import group_args
 
 def reflection_file_server(crystal_symmetry, reflection_files):
   return reflection_file_utils.reflection_file_server(
@@ -106,8 +103,11 @@ def run(pdb_file_name,data_file_name):
                 fmodel = get_fmodel(crystal_symmetry = crystal_symmetry,
                                     reflection_files = data_file_name,
                                     model            = model)
-                print  "Initial r_work=%6.4f r_free=%6.4f" % (fmodel.r_work(),
+                print  "r_work=%6.4f r_free=%6.4f" % (fmodel.r_work(),
                                             fmodel.r_free())
+                for atom in residue.atoms():
+                  if atom.name in target:
+                    print atom.name
                              
 
 if __name__ == '__main__':
