@@ -1,6 +1,7 @@
 from __future__ import division
 from mmtbx import utils
 from mmtbx import model
+from mmtbx import map_tools
 import iotbx.pdb
 from iotbx import reflection_file_utils
 from cStringIO import StringIO
@@ -10,6 +11,7 @@ import sys
 from scitbx.math import superpose
 from libtbx.utils import null_out
 from iotbx.file_reader import any_file
+from cctbx import miller
 
 def reflection_file_server(crystal_symmetry, reflection_files):
   return reflection_file_utils.reflection_file_server(
@@ -18,7 +20,7 @@ def reflection_file_server(crystal_symmetry, reflection_files):
     reflection_files=reflection_files,
     err=StringIO())
 
-def get_fmodel(crystal_symmetry,reflection_files,model):
+def get_fmodel(crystal_symmetry,reflection_files,xray_structure):
   hkl_file = any_file(file_name = reflection_files)
   rfs = reflection_file_server(
         crystal_symmetry = crystal_symmetry,
@@ -32,8 +34,8 @@ def get_fmodel(crystal_symmetry,reflection_files,model):
   fmodel = mmtbx.f_model.manager(
       f_obs          = f_obs,
       r_free_flags   = r_free_flags,
-      xray_structure = model.get_xray_structure())
-  fmodel.update_all_scales()
+      xray_structure = xray_structure)
+  fmodel.update_all_scales(remove_outliers=False)
   return fmodel
 
 def get_model(crystal_symmetry,pdb_hierarchy):
@@ -65,11 +67,11 @@ def get_map(fmodel):
             map_type = "mFo-DFc",
             isotropize   = True,
             fill_missing = False)
-  fft_map = f_map.fft_map(resolution_factor=1/5)
+  fft_map = f_map.fft_map(resolution_factor=1/5.)
   return fft_map.real_map_unpadded()
 
 def run(pdb_file_name,data_file_name):
-#  pdb_code = os.path.basename(pdb_file_name)[3:7]
+  pdb_code = os.path.basename(pdb_file_name)[3:7]
   pdb_inp = iotbx.pdb.input(file_name = pdb_file_name)
   resolution = pdb_inp.resolution()
   d_min = 0.9
@@ -78,13 +80,14 @@ def run(pdb_file_name,data_file_name):
     print resolution
     crystal_symmetry = pdb_inp.crystal_symmetry()
     pdb_hierarchy = pdb_inp.construct_hierarchy()
-#    model = get_model(crystal_symmetry = crystal_symmetry,
-#                      pdb_hierarchy    = pdb_hierarchy)
-#    fmodel = get_fmodel(crystal_symmetry = crystal_symmetry,
-#                        reflection_files = data_file_name,
-#                        model            = model)
-#    print  "Initial r_work=%6.4f r_free=%6.4f" % (fmodel.r_work(),
-#                                            fmodel.r_free())
+    xray_structure = pdb_hierarchy.extract_xray_structure(crystal_symmetry = crystal_symmetry)
+    fmodel_ini = get_fmodel(crystal_symmetry = crystal_symmetry,
+                        reflection_files = data_file_name,
+                        xray_structure   = xray_structure)
+    print  "Initial r_work=%6.4f r_free=%6.4f" % (fmodel_ini.r_work(),
+                                            fmodel_ini.r_free())
+    prefix = 0
+    hierarchy = iotbx.pdb.hierarchy.root()
     for model in pdb_hierarchy.models():
       for chain in model.chains():
         for residue_group in chain.residue_groups():
@@ -98,18 +101,56 @@ def run(pdb_file_name,data_file_name):
                 print select
                 pdb_hierarchy_new = model_select(pdb_hierarchy = pdb_hierarchy,
                                                         select = select) 
-                model = get_model(crystal_symmetry = crystal_symmetry,
-                                  pdb_hierarchy    = pdb_hierarchy_new)
-                fmodel = get_fmodel(crystal_symmetry = crystal_symmetry,
-                                    reflection_files = data_file_name,
-                                    model            = model)
-                print  "r_work=%6.4f r_free=%6.4f" % (fmodel.r_work(),
-                                            fmodel.r_free())
+#                pdb_hierarchy_new.write_pdb_file(file_name = "update_pdb_%d.pdb"%prefix)
+#                pdb_hierarchy.write_pdb_file(file_name = "pdb_%d.pdb"%prefix)
+                xray_structure_new = pdb_hierarchy_new.extract_xray_structure(crystal_symmetry = crystal_symmetry)
+                fmodel = fmodel_ini.deep_copy()
+                prefix += 1
+                fmodel.update_xray_structure(xray_structure = xray_structure_new)
+                fmodel.update_all_scales(remove_outliers=False)
+                map_data = get_map(fmodel = fmodel)
+                rg = iotbx.pdb.hierarchy.residue_group()
+                ag = iotbx.pdb.hierarchy.atom_group()
+                ag.resname = "ARG"
                 for atom in residue.atoms():
                   if atom.name in target:
                     print atom.name
-                             
-
+                    sites_cart = atom.xyz
+                    map_best = None
+                    xyz_best = []
+                    x_site = -0.1 
+                    while x_site < 0.1:
+                      x_site += 0.01
+                      y_site = -0.1
+                      while y_site < 0.1:
+                        y_site += 0.01
+                        z_site = -0.1
+                        while z_site < 0.1:
+                          z_site += 0.01
+                          site_cart = [sites_cart[0]+x_site,
+                                        sites_cart[1]+y_site,
+                                        sites_cart[2]+z_site] 
+                          site_frac = xray_structure.unit_cell().fractionalize(site_cart)
+                          map_value = map_data.tricubic_interpolation(site_frac)
+                          if (map_value > map_best):
+                            atom.set_xyz(site_cart)
+                            map_best = map_value           
+                            xyz_best = site_cart
+                    print sites_cart
+                    print map_best
+                    print xyz_best               
+                    print atom.xyz
+                    ag.append_atom(atom.detached_copy()) 
+                rg.resseq=str(prefix)
+                rg.append_atom_group(ag)
+                model = iotbx.pdb.hierarchy.model()
+                chain = iotbx.pdb.hierarchy.chain()
+                chain.id = "A"
+                model.append_chain(chain)
+                hierarchy.append_model(model)
+                chain.append_residue_group(rg)
+    hierarchy.write_pdb_file(file_name="%s.pdb"%pdb_code)
+                   
 if __name__ == '__main__':
   if 0:
     path = "/home/pdb/pdb/"
