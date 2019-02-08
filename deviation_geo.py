@@ -68,11 +68,10 @@ def move_residue_atoms(map_data, residue, crystal_symmetry):
           site_frac = crystal_symmetry.unit_cell().fractionalize(site_cart)
           map_value = map_data.tricubic_interpolation(site_frac)
           if (map_value > map_best):
-            atom.set_xyz(site_cart)
             map_best = map_value           
             xyz_best = site_cart
     print xyz_best               
-  #  print list(residue.atoms().extract_xyz())                        
+    atom.set_xyz(xyz_best)
 
 def run(pdb_file_name, data_file_name):
   pdb_code = os.path.basename(pdb_file_name)[:4]
@@ -105,7 +104,8 @@ def run(pdb_file_name, data_file_name):
               map_data         = map_data, 
               residue          = residue,
               crystal_symmetry = crystal_symmetry)
-  pdb_hierarchy.write_pdb_file(file_name="%s_update.pdb"%pdb_code)
+  pdb_hierarchy.write_pdb_file(file_name="%s_update.pdb"%pdb_code,
+                             crystal_symmetry = crystal_symmetry)
                    
 if __name__ == '__main__':
   if 0:
@@ -124,4 +124,5 @@ if __name__ == '__main__':
         d = "/".join([dpath,pdb_code[1:3],"r"+pdb_code+"sf.ent.gz"])
         run(pdb_file_name=f,data_file_name=d)
   else:
-    run(pdb_file_name="1akg.pdb", data_file_name="1akg.mtz")
+#    run(pdb_file_name="data_perturbed.pdb", data_file_name="data.mtz")
+    run(pdb_file_name="p1-1akg_shift.pdb", data_file_name="p1-1akg.mtz")
