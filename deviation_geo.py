@@ -152,7 +152,7 @@ def map_peak_coordinate(args):
     fmodel.r_work(), fmodel.r_free()), shift
   return  xyz_best
 
-def run(pdb_file_name, data_file_name):
+def run(pdb_file_name, data_file_name, nproc=8):
   pdb_code = os.path.basename(pdb_file_name)[:4]
   pdb_inp = iotbx.pdb.input(file_name = pdb_file_name)
   crystal_symmetry = pdb_inp.crystal_symmetry()
@@ -167,7 +167,6 @@ def run(pdb_file_name, data_file_name):
     fmodel_ini.r_free())
   get_class = iotbx.pdb.common_residue_names_get_class
   atom_seq=[]
-  print pdb_hierarchy.atoms().extract_xyz()
   for model in pdb_hierarchy.models():
     for chain in model.chains():
       for residue_group in chain.residue_groups():
@@ -177,21 +176,17 @@ def run(pdb_file_name, data_file_name):
             for atom in residue.atoms():
               if(atom.element.strip().upper()=="H"): continue
               atom_seq.append(atom.i_seq)
-  args = [(atom_seq[i],pdb_hierarchy,xray_structure,crystal_symmetry,fmodel_ini)
-    for i in range(len(atom_seq))] 
-  results =   pool_map( func   = map_peak_coordinate,
+  args = [(atom_seq[i],pdb_hierarchy,xray_structure,crystal_symmetry,
+    fmodel_ini)  for i in range(len(atom_seq))] 
+  results = pool_map( 
+    func      = map_peak_coordinate,
     iterable  = args,
-    processes = 7)
-  print results
-#  site_carts = pdb_hierarchy.atoms().extract_xyz()
-#  print site_carts
-  
+    processes = nproc)
+  site_carts = flex.vec3_double(pdb_hierarchy.atoms().extract_xyz())
+  select = flex.size_t([i for i in atom_seq])
   site_cart_shifted = flex.vec3_double(results) 
-  print site_cart_shifted
-  pdb_hierarchy.atoms().set_xyz(site_cart_shifted)
-
-
-
+  site_cart_new = site_carts.set_selected(select,site_cart_shifted)
+  pdb_hierarchy.atoms().set_xyz(site_cart_new)
   pdb_hierarchy.write_pdb_file(file_name="%s_update.pdb"%pdb_code,
                              crystal_symmetry = crystal_symmetry)
   xray_structure = pdb_hierarchy.extract_xray_structure(
