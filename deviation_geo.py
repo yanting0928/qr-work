@@ -13,7 +13,7 @@ from libtbx.utils import null_out
 from iotbx.file_reader import any_file
 from cctbx import miller
 from scitbx.array_family import flex
-
+from libtbx.easy_mp import pool_map
 
 #def ccp4_map(cg, file_name, map_data):
 #  from iotbx import mrcfile
@@ -98,7 +98,7 @@ def move_residue_atoms(map_data, atom, crystal_symmetry):
           xyz_best = site_cart[:]
   diff = list(flex.vec3_double([sites_cart])-flex.vec3_double([xyz_best]))[0]
   atom.set_xyz(xyz_best)
-  return " ".join(["%8.3f"%i for i in diff])
+  return " ".join(["%8.3f"%i for i in diff]),xyz_best
     
 def reflection_file_server(crystal_symmetry, reflection_files):
   return reflection_file_utils.reflection_file_server(
@@ -133,6 +133,25 @@ def get_map(fmodel, resolution_factor=1./10):
   fft_map = f_map.fft_map(resolution_factor=resolution_factor)
   return fft_map.real_map_unpadded()
 
+def map_peak_coordinate(args):
+  atom_i_seq,pdb_hierarchy,xray_structure,crystal_symmetry,fmodel_ini = args
+  atom = pdb_hierarchy.atoms()[atom_i_seq]
+  sel_int = flex.size_t([atom.i_seq])
+  n_atoms = xray_structure.scatterers().size()
+  sel_bool = flex.bool(n_atoms, sel_int)
+  xrs_sel = xray_structure.select(~sel_bool)
+  fmodel = fmodel_ini.deep_copy()
+  fmodel.update_xray_structure(xray_structure = xrs_sel,
+    update_f_calc=True)
+  map_data = get_map(fmodel = fmodel)
+  shift, xyz_best = move_residue_atoms(
+    map_data         = map_data,
+    atom             = atom,
+    crystal_symmetry = crystal_symmetry)
+  print "r_work=%6.4f r_free=%6.4f"%(
+    fmodel.r_work(), fmodel.r_free()), shift
+  return  xyz_best
+
 def run(pdb_file_name, data_file_name):
   pdb_code = os.path.basename(pdb_file_name)[:4]
   pdb_inp = iotbx.pdb.input(file_name = pdb_file_name)
@@ -147,6 +166,8 @@ def run(pdb_file_name, data_file_name):
   print  "Initial r_work=%6.4f r_free=%6.4f" % (fmodel_ini.r_work(),
     fmodel_ini.r_free())
   get_class = iotbx.pdb.common_residue_names_get_class
+  atom_seq=[]
+  print pdb_hierarchy.atoms().extract_xyz()
   for model in pdb_hierarchy.models():
     for chain in model.chains():
       for residue_group in chain.residue_groups():
@@ -155,20 +176,22 @@ def run(pdb_file_name, data_file_name):
             if(get_class(name=residue.resname) == "common_water"): continue
             for atom in residue.atoms():
               if(atom.element.strip().upper()=="H"): continue
-              sel_int = flex.size_t([atom.i_seq])
-              n_atoms = xray_structure.scatterers().size()
-              sel_bool = flex.bool(n_atoms, sel_int)
-              xrs_sel = xray_structure.select(~sel_bool)
-              fmodel = fmodel_ini.deep_copy()
-              fmodel.update_xray_structure(xray_structure = xrs_sel, 
-                update_f_calc=True)
-              map_data = get_map(fmodel = fmodel)
-              shift = move_residue_atoms(
-                map_data         = map_data, 
-                atom             = atom,
-                crystal_symmetry = crystal_symmetry)
-              print "r_work=%6.4f r_free=%6.4f"%(
-                fmodel.r_work(), fmodel.r_free()), shift 
+              atom_seq.append(atom.i_seq)
+  args = [(atom_seq[i],pdb_hierarchy,xray_structure,crystal_symmetry,fmodel_ini)
+    for i in range(len(atom_seq))] 
+  results =   pool_map( func   = map_peak_coordinate,
+    iterable  = args,
+    processes = 7)
+  print results
+#  site_carts = pdb_hierarchy.atoms().extract_xyz()
+#  print site_carts
+  
+  site_cart_shifted = flex.vec3_double(results) 
+  print site_cart_shifted
+  pdb_hierarchy.atoms().set_xyz(site_cart_shifted)
+
+
+
   pdb_hierarchy.write_pdb_file(file_name="%s_update.pdb"%pdb_code,
                              crystal_symmetry = crystal_symmetry)
   xray_structure = pdb_hierarchy.extract_xray_structure(
