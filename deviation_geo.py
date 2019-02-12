@@ -14,6 +14,7 @@ from iotbx.file_reader import any_file
 from cctbx import miller
 from scitbx.array_family import flex
 from libtbx.easy_mp import pool_map
+from libtbx.utils import null_out
 
 #def ccp4_map(cg, file_name, map_data):
 #  from iotbx import mrcfile
@@ -78,7 +79,7 @@ def move_residue_atoms(map_data, atom, crystal_symmetry):
   map_best = -9999
   xyz_best = []
   inc = 0.001
-  x_site = -0.1 
+  x_site = -0.1
   while x_site < 0.1:
     x_site += inc
     y_site = -0.1
@@ -90,16 +91,16 @@ def move_residue_atoms(map_data, atom, crystal_symmetry):
         site_cart = [
           sites_cart[0]+x_site,
           sites_cart[1]+y_site,
-          sites_cart[2]+z_site] 
+          sites_cart[2]+z_site]
         site_frac = crystal_symmetry.unit_cell().fractionalize(site_cart)
         map_value = map_data.tricubic_interpolation(site_frac)
         if (map_value > map_best):
-          map_best = map_value           
+          map_best = map_value
           xyz_best = site_cart[:]
   diff = list(flex.vec3_double([sites_cart])-flex.vec3_double([xyz_best]))[0]
   atom.set_xyz(xyz_best)
   return " ".join(["%8.3f"%i for i in diff]),xyz_best
-    
+
 def reflection_file_server(crystal_symmetry, reflection_files):
   return reflection_file_utils.reflection_file_server(
     crystal_symmetry=crystal_symmetry,
@@ -155,10 +156,15 @@ def map_peak_coordinate(args):
 def run(pdb_file_name, data_file_name, nproc):
   pdb_code = os.path.basename(pdb_file_name)[:4]
   pdb_inp = iotbx.pdb.input(file_name = pdb_file_name)
-  crystal_symmetry = pdb_inp.crystal_symmetry()
-  pdb_hierarchy = pdb_inp.construct_hierarchy()
-  xray_structure = pdb_hierarchy.extract_xray_structure(
-    crystal_symmetry = crystal_symmetry)
+  model = mmtbx.model.manager(
+    model_input       = pdb_inp,
+    build_grm         = True,
+    stop_for_unknowns = False,
+    log               = null_out())
+  model.geometry_statistics(use_hydrogens=False).show()
+  crystal_symmetry = model.crystal_symmetry()
+  pdb_hierarchy = model.get_hierarchy()
+  xray_structure = model.get_xray_structure()
   fmodel_ini = get_fmodel(
     crystal_symmetry = crystal_symmetry,
     reflection_files = data_file_name,
@@ -167,8 +173,8 @@ def run(pdb_file_name, data_file_name, nproc):
     fmodel_ini.r_free())
   get_class = iotbx.pdb.common_residue_names_get_class
   atom_seq=[]
-  for model in pdb_hierarchy.models():
-    for chain in model.chains():
+  for model_ in pdb_hierarchy.models():
+    for chain in model_.chains():
       for residue_group in chain.residue_groups():
         for conformer  in residue_group.conformers():
           for residue in conformer.residues():
@@ -177,27 +183,29 @@ def run(pdb_file_name, data_file_name, nproc):
               if(atom.element.strip().upper()=="H"): continue
               atom_seq.append(atom.i_seq)
   args = [(atom_seq[i],pdb_hierarchy,xray_structure,crystal_symmetry,
-    fmodel_ini)  for i in range(len(atom_seq))] 
-  results = pool_map( 
+    fmodel_ini)  for i in range(len(atom_seq))]
+  results = pool_map(
     func      = map_peak_coordinate,
     iterable  = args,
     processes = nproc)
   site_carts = flex.vec3_double(pdb_hierarchy.atoms().extract_xyz())
   select = flex.size_t([i for i in atom_seq])
-  site_cart_shifted = flex.vec3_double(results) 
+  site_cart_shifted = flex.vec3_double(results)
   site_cart_new = site_carts.set_selected(select,site_cart_shifted)
   pdb_hierarchy.atoms().set_xyz(site_cart_new)
-  pdb_hierarchy.write_pdb_file(file_name="%s_update.pdb"%pdb_code,
-                             crystal_symmetry = crystal_symmetry)
+  pdb_hierarchy.write_pdb_file(file_name="%s_updated.pdb"%pdb_code,
+    crystal_symmetry = crystal_symmetry)
   xray_structure = pdb_hierarchy.extract_xray_structure(
     crystal_symmetry = crystal_symmetry)
   fmodel = get_fmodel(
     crystal_symmetry = crystal_symmetry,
     reflection_files = data_file_name,
     xray_structure   = xray_structure)
+  model.set_sites_cart(sites_cart = xray_structure.sites_cart())
+  model.geometry_statistics(use_hydrogens=False).show()
   print  "Final r_work=%6.4f r_free=%6.4f" % (fmodel.r_work(),
     fmodel.r_free())
-                   
+
 if __name__ == '__main__':
 #  exercise()
   if 1:
@@ -217,12 +225,15 @@ if __name__ == '__main__':
         if(hierarchy.models_size()>1): continue # Skip multi-model files
         print pdb_file, mtz_file, size, hierarchy.models_size()
         pdbs .append(pdb_file)
-        mtzs .append(mtz_file) 
+        mtzs .append(mtz_file)
         sizes.append(size)
     sel = flex.sort_permutation(sizes) # Order by size, from smallest to largest
     pdbs  = pdbs .select(sel)
-    mtzs  = mtzs .select(sel) 
+    mtzs  = mtzs .select(sel)
     sizes = sizes.select(sel)
-    run(pdb_file_name=pdb_file, data_file_name=mtz_file, nproc=50)
+    for pdb_file, mtz_file in zip(pdbs, mtzs):
+      run(pdb_file_name=pdb_file, data_file_name=mtz_file, nproc=50)
+      STOP()
+
   else:
     run(pdb_file_name="1akg.pdb", data_file_name="1akg.mtz")
