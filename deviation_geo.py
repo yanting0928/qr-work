@@ -200,21 +200,16 @@ def run(pdb_file_name, data_file_name, nproc=8):
                    
 if __name__ == '__main__':
 #  exercise()
-  if 0:
-    path = "/home/pdb/pdb/"
-    dpath = "/home/pdb/structure_factors"
-    of = open("".join([path,"INDEX"]),"r")
-    files = ["".join([path,f]).strip() for f in of.readlines()]
-    of.close()
-    of = open("/".join([dpath,"INDEX"]),"r")
-    dfiles = [
-      os.path.basename("".join([path,f]).strip())[1:5] for f in of.readlines()]
-    of.close()
-    for f in files:
-      pdb_code = os.path.basename(f)[3:7]
-      if (pdb_code in dfiles):
-        d = "/".join([dpath,pdb_code[1:3],"r"+pdb_code+"sf.ent.gz"])
-        run(pdb_file_name=f,data_file_name=d)
+  if 1:
+    path = "/net/anaconda/raid1/afonine/phenix_dev/rt7/"
+    for pdb_file in os.listdir(path):
+      if(pdb_file.endswith(".pdb")):
+        code = pdb_file[:-4]
+        pdb_file = "%s%s.pdb"%(path, code)
+        mtz_file = "%s%s.mtz"%(path, code)
+        assert os.path.isfile(mtz_file)
+        assert os.path.isfile(pdb_file)
+        print pdb_file, mtz_file
+        run(pdb_file_name=pdb_file, data_file_name=mtz_file)
   else:
-#    run(pdb_file_name="data_perturbed.pdb", data_file_name="data.mtz")
     run(pdb_file_name="1akg.pdb", data_file_name="1akg.mtz")
