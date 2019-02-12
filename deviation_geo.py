@@ -152,7 +152,7 @@ def map_peak_coordinate(args):
     fmodel.r_work(), fmodel.r_free()), shift
   return  xyz_best
 
-def run(pdb_file_name, data_file_name, nproc=8):
+def run(pdb_file_name, data_file_name, nproc):
   pdb_code = os.path.basename(pdb_file_name)[:4]
   pdb_inp = iotbx.pdb.input(file_name = pdb_file_name)
   crystal_symmetry = pdb_inp.crystal_symmetry()
@@ -202,6 +202,9 @@ if __name__ == '__main__':
 #  exercise()
   if 1:
     path = "/net/anaconda/raid1/afonine/phenix_dev/rt7/"
+    pdbs  = flex.std_string()
+    mtzs  = flex.std_string()
+    sizes = flex.double()
     for pdb_file in os.listdir(path):
       if(pdb_file.endswith(".pdb")):
         code = pdb_file[:-4]
@@ -209,7 +212,17 @@ if __name__ == '__main__':
         mtz_file = "%s%s.mtz"%(path, code)
         assert os.path.isfile(mtz_file)
         assert os.path.isfile(pdb_file)
-        print pdb_file, mtz_file
-        run(pdb_file_name=pdb_file, data_file_name=mtz_file)
+        hierarchy = iotbx.pdb.input(file_name=pdb_file).construct_hierarchy()
+        size = hierarchy.atoms().size()
+        if(hierarchy.models_size()>1): continue # Skip multi-model files
+        print pdb_file, mtz_file, size, hierarchy.models_size()
+        pdbs .append(pdb_file)
+        mtzs .append(mtz_file) 
+        sizes.append(size)
+    sel = flex.sort_permutation(sizes) # Order by size, from smallest to largest
+    pdbs  = pdbs .select(sel)
+    mtzs  = mtzs .select(sel) 
+    sizes = sizes.select(sel)
+    run(pdb_file_name=pdb_file, data_file_name=mtz_file, nproc=50)
   else:
     run(pdb_file_name="1akg.pdb", data_file_name="1akg.mtz")
