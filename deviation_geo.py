@@ -149,9 +149,15 @@ def map_peak_coordinate(args):
     map_data         = map_data,
     atom             = atom,
     crystal_symmetry = crystal_symmetry)
-  print "r_work=%6.4f r_free=%6.4f"%(
-    fmodel.r_work(), fmodel.r_free()), shift
-  return  xyz_best
+  if 0: # Good for debugging!
+    print "r_work=%6.4f r_free=%6.4f"%(fmodel.r_work(), fmodel.r_free()), shift
+  return xyz_best
+  
+def show(model, fmodel, prefix):
+  r = model.geometry_statistics(use_hydrogens=False).result()
+  f="%s r_work=%6.4f r_free=%6.4f bond: %7.4f angle: %7.3f"
+  print f%(prefix, fmodel.r_work(), fmodel.r_free(), r.bond.mean, r.angle.mean)
+  sys.stdout.flush()
 
 def run(pdb_file_name, data_file_name, nproc):
   pdb_code = os.path.basename(pdb_file_name)[:4]
@@ -161,7 +167,6 @@ def run(pdb_file_name, data_file_name, nproc):
     build_grm         = True,
     stop_for_unknowns = False,
     log               = null_out())
-  model.geometry_statistics(use_hydrogens=False).show()
   crystal_symmetry = model.crystal_symmetry()
   pdb_hierarchy = model.get_hierarchy()
   xray_structure = model.get_xray_structure()
@@ -169,8 +174,7 @@ def run(pdb_file_name, data_file_name, nproc):
     crystal_symmetry = crystal_symmetry,
     reflection_files = data_file_name,
     xray_structure   = xray_structure)
-  print  "Initial r_work=%6.4f r_free=%6.4f" % (fmodel_ini.r_work(),
-    fmodel_ini.r_free())
+  show(model = model, fmodel = fmodel_ini, prefix = "Start:")
   get_class = iotbx.pdb.common_residue_names_get_class
   atom_seq=[]
   for model_ in pdb_hierarchy.models():
@@ -202,16 +206,15 @@ def run(pdb_file_name, data_file_name, nproc):
     reflection_files = data_file_name,
     xray_structure   = xray_structure)
   model.set_sites_cart(sites_cart = xray_structure.sites_cart())
-  model.geometry_statistics(use_hydrogens=False).show()
-  print  "Final r_work=%6.4f r_free=%6.4f" % (fmodel.r_work(),
-    fmodel.r_free())
-
+  show(model = model, fmodel = fmodel, prefix = "Final:")
+  
 if __name__ == '__main__':
 #  exercise()
   if 1:
-    path = "/net/anaconda/raid1/afonine/phenix_dev/rt7/"
+    path = "/net/anaconda/raid1/afonine/work/high_res_survey/qr-work/high_res_pdb_mtz/"
     pdbs  = flex.std_string()
     mtzs  = flex.std_string()
+    codes = flex.std_string()
     sizes = flex.double()
     for pdb_file in os.listdir(path):
       if(pdb_file.endswith(".pdb")):
@@ -223,17 +226,18 @@ if __name__ == '__main__':
         hierarchy = iotbx.pdb.input(file_name=pdb_file).construct_hierarchy()
         size = hierarchy.atoms().size()
         if(hierarchy.models_size()>1): continue # Skip multi-model files
-        print pdb_file, mtz_file, size, hierarchy.models_size()
+        #print pdb_file, mtz_file, size
         pdbs .append(pdb_file)
         mtzs .append(mtz_file)
+        codes.append(code)
         sizes.append(size)
     sel = flex.sort_permutation(sizes) # Order by size, from smallest to largest
     pdbs  = pdbs .select(sel)
     mtzs  = mtzs .select(sel)
+    codes = codes.select(sel)
     sizes = sizes.select(sel)
-    for pdb_file, mtz_file in zip(pdbs, mtzs):
-      run(pdb_file_name=pdb_file, data_file_name=mtz_file, nproc=50)
-      STOP()
-
+    for pdb_file, mtz_file, code in zip(pdbs, mtzs, codes):
+      print code, "-"*75
+      run(pdb_file_name=pdb_file, data_file_name=mtz_file, nproc=25)
   else:
     run(pdb_file_name="1akg.pdb", data_file_name="1akg.mtz")
