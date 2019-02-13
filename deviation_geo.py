@@ -78,7 +78,8 @@ from cctbx import maptbx
 def move_residue_atoms(map_data, atom, crystal_symmetry):
   sites_cart = atom.xyz
   xyz_best = maptbx.fit_point_3d_grid_search(site_cart=sites_cart, 
-    map_data=map_data, unit_cell=crystal_symmetry.unit_cell(), increment=0.001)
+    map_data=map_data, unit_cell=crystal_symmetry.unit_cell(), amplitude=0.1,
+    increment=0.001)
   diff = list(flex.vec3_double([sites_cart])-flex.vec3_double([xyz_best]))[0]
   return " ".join(["%8.3f"%i for i in diff]), xyz_best
 
