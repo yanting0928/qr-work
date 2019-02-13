@@ -15,6 +15,7 @@ from cctbx import miller
 from scitbx.array_family import flex
 from libtbx.easy_mp import pool_map
 from libtbx.utils import null_out
+from cctbx import maptbx
 
 #def ccp4_map(cg, file_name, map_data):
 #  from iotbx import mrcfile
@@ -76,30 +77,10 @@ from libtbx.utils import null_out
 
 def move_residue_atoms(map_data, atom, crystal_symmetry):
   sites_cart = atom.xyz
-  map_best = -9999
-  xyz_best = []
-  inc = 0.001
-  x_site = -0.1
-  while x_site < 0.1:
-    x_site += inc
-    y_site = -0.1
-    while y_site < 0.1:
-      y_site += inc
-      z_site = -0.1
-      while z_site < 0.1:
-        z_site += inc
-        site_cart = [
-          sites_cart[0]+x_site,
-          sites_cart[1]+y_site,
-          sites_cart[2]+z_site]
-        site_frac = crystal_symmetry.unit_cell().fractionalize(site_cart)
-        map_value = map_data.tricubic_interpolation(site_frac)
-        if (map_value > map_best):
-          map_best = map_value
-          xyz_best = site_cart[:]
+  xyz_best = maptbx.fit_point_3d_grid_search(site_cart=sites_cart, 
+    map_data=map_data, unit_cell=crystal_symmetry.unit_cell(), increment=0.001)
   diff = list(flex.vec3_double([sites_cart])-flex.vec3_double([xyz_best]))[0]
-  atom.set_xyz(xyz_best)
-  return " ".join(["%8.3f"%i for i in diff]),xyz_best
+  return " ".join(["%8.3f"%i for i in diff]), xyz_best
 
 def reflection_file_server(crystal_symmetry, reflection_files):
   return reflection_file_utils.reflection_file_server(
@@ -126,12 +107,13 @@ def get_fmodel(crystal_symmetry, reflection_files, xray_structure):
   fmodel.update_all_scales()
   return fmodel
 
-def get_map(fmodel, resolution_factor=1./10):
+def get_map(fmodel, resolution_factor=1./10, map_type="mFo-DFc", scale=False):
   f_map = fmodel.electron_density_map().map_coefficients(
-    map_type = "mFo-DFc",
+    map_type     = map_type,
     isotropize   = True,
     fill_missing = False)
   fft_map = f_map.fft_map(resolution_factor=resolution_factor)
+  if(scale): fft_map.apply_sigma_scaling()
   return fft_map.real_map_unpadded()
 
 def map_peak_coordinate(args):
@@ -152,9 +134,11 @@ def map_peak_coordinate(args):
   if 0: # Good for debugging!
     print "r_work=%6.4f r_free=%6.4f"%(fmodel.r_work(), fmodel.r_free()), shift
   return xyz_best
-  
+
 def show(model, fmodel, prefix):
-  r = model.geometry_statistics(use_hydrogens=False).result()
+  sel = model.selection(string="protein")
+  model_ = model.select(sel)
+  r = model_.geometry_statistics(use_hydrogens=False).result()
   f="%s r_work=%6.4f r_free=%6.4f bond: %7.4f angle: %7.3f"
   print f%(prefix, fmodel.r_work(), fmodel.r_free(), r.bond.mean, r.angle.mean)
   sys.stdout.flush()
@@ -174,6 +158,16 @@ def run(pdb_file_name, data_file_name, nproc):
     crystal_symmetry = crystal_symmetry,
     reflection_files = data_file_name,
     xray_structure   = xray_structure)
+  cmpl = fmodel_ini.f_obs().completeness()
+  #if(cmpl<0.9):
+  #  print "Low completeness:", cmpl
+  #  return # SKIP
+  if(fmodel_ini.r_work()*100.>20):
+    print "  skip: too large starting Rwork, inputs must be bad."
+    return # SKIP
+  unit_cell = crystal_symmetry.unit_cell()
+  tfofc = get_map(
+    fmodel=fmodel_ini, resolution_factor=1./4, map_type="2mFo-DFc", scale=True)
   show(model = model, fmodel = fmodel_ini, prefix = "Start:")
   get_class = iotbx.pdb.common_residue_names_get_class
   atom_seq=[]
@@ -185,9 +179,12 @@ def run(pdb_file_name, data_file_name, nproc):
             if(get_class(name=residue.resname) == "common_water"): continue
             for atom in residue.atoms():
               if(atom.element.strip().upper()=="H"): continue
+              map_at_center = tfofc.tricubic_interpolation(
+                unit_cell.fractionalize(atom.xyz))
+              if(map_at_center<1.0): continue
               atom_seq.append(atom.i_seq)
-  args = [(atom_seq[i],pdb_hierarchy,xray_structure,crystal_symmetry,
-    fmodel_ini)  for i in range(len(atom_seq))]
+  args = [(atom_seq[i], pdb_hierarchy, xray_structure, crystal_symmetry,
+    fmodel_ini) for i in range(len(atom_seq))]
   results = pool_map(
     func      = map_peak_coordinate,
     iterable  = args,
@@ -207,11 +204,11 @@ def run(pdb_file_name, data_file_name, nproc):
     xray_structure   = xray_structure)
   model.set_sites_cart(sites_cart = xray_structure.sites_cart())
   show(model = model, fmodel = fmodel, prefix = "Final:")
-  
+
 if __name__ == '__main__':
 #  exercise()
   if 1:
-    path = "/net/anaconda/raid1/afonine/work/high_res_survey/qr-work/high_res_pdb_mtz/"
+    path = "/net/anaconda/raid1/afonine/work/high_res_survey/high_res_pdb_mtz/"
     pdbs  = flex.std_string()
     mtzs  = flex.std_string()
     codes = flex.std_string()
@@ -219,10 +216,17 @@ if __name__ == '__main__':
     for pdb_file in os.listdir(path):
       if(pdb_file.endswith(".pdb")):
         code = pdb_file[:-4]
+        #
+        #if code != "1etm": continue # For debugging
+        #
         pdb_file = "%s%s.pdb"%(path, code)
         mtz_file = "%s%s.mtz"%(path, code)
         assert os.path.isfile(mtz_file)
         assert os.path.isfile(pdb_file)
+        pdb_file_result = "%s_updated.pdb"%code
+        if(os.path.isfile(pdb_file_result)):
+          print "SKIP (already processed):", pdb_file_result
+          continue # Skip already done case
         hierarchy = iotbx.pdb.input(file_name=pdb_file).construct_hierarchy()
         size = hierarchy.atoms().size()
         if(hierarchy.models_size()>1): continue # Skip multi-model files
@@ -238,6 +242,7 @@ if __name__ == '__main__':
     sizes = sizes.select(sel)
     for pdb_file, mtz_file, code in zip(pdbs, mtzs, codes):
       print code, "-"*75
-      run(pdb_file_name=pdb_file, data_file_name=mtz_file, nproc=25)
+      run(pdb_file_name=pdb_file, data_file_name=mtz_file, nproc=50)
   else:
-    run(pdb_file_name="1akg.pdb", data_file_name="1akg.mtz")
+    run(pdb_file_name="3nir_refine_001.pdb",
+        data_file_name="3nir_refine_data.mtz", nproc=90)
