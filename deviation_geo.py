@@ -16,6 +16,8 @@ from scitbx.array_family import flex
 from libtbx.easy_mp import pool_map
 from libtbx.utils import null_out
 from cctbx import maptbx
+import mmtbx.hydrogens
+from mmtbx.utils import run_reduce_with_timeout
 
 #def ccp4_map(cg, file_name, map_data):
 #  from iotbx import mrcfile
@@ -77,7 +79,7 @@ from cctbx import maptbx
 
 def move_residue_atoms(map_data, atom, crystal_symmetry):
   sites_cart = atom.xyz
-  xyz_best = maptbx.fit_point_3d_grid_search(site_cart=sites_cart, 
+  xyz_best = maptbx.fit_point_3d_grid_search(site_cart=sites_cart,
     map_data=map_data, unit_cell=crystal_symmetry.unit_cell(), amplitude=0.1,
     increment=0.001)
   diff = list(flex.vec3_double([sites_cart])-flex.vec3_double([xyz_best]))[0]
@@ -108,12 +110,19 @@ def get_fmodel(crystal_symmetry, reflection_files, xray_structure):
   fmodel.update_all_scales()
   return fmodel
 
-def get_map(fmodel, resolution_factor=1./10, map_type="mFo-DFc", scale=False):
+def get_map(fmodel, step=0.05, map_type="mFo-DFc", scale=False):
   f_map = fmodel.electron_density_map().map_coefficients(
     map_type     = map_type,
     isotropize   = True,
     fill_missing = False)
-  fft_map = f_map.fft_map(resolution_factor=resolution_factor)
+  crystal_gridding = maptbx.crystal_gridding(
+    unit_cell        = f_map.unit_cell(),
+    space_group_info = f_map.crystal_symmetry().space_group_info(),
+    step             = step,
+    symmetry_flags   = maptbx.use_space_group_symmetry)
+  fft_map = miller.fft_map(
+    crystal_gridding     = crystal_gridding,
+    fourier_coefficients = f_map)
   if(scale): fft_map.apply_sigma_scaling()
   return fft_map.real_map_unpadded()
 
@@ -132,7 +141,9 @@ def map_peak_coordinate(args):
     map_data         = map_data,
     atom             = atom,
     crystal_symmetry = crystal_symmetry)
-  if 0: # Good for debugging!
+  if 0 and (shift.split()[0].strip() in ["0.100","-0.100"] or
+            shift.split()[1].strip() in ["0.100","-0.100"] or
+            shift.split()[2].strip() in ["0.100","-0.100"]):
     print "r_work=%6.4f r_free=%6.4f"%(fmodel.r_work(), fmodel.r_free()), shift
   return xyz_best
 
@@ -144,14 +155,30 @@ def show(model, fmodel, prefix):
   print f%(prefix, fmodel.r_work(), fmodel.r_free(), r.bond.mean, r.angle.mean)
   sys.stdout.flush()
 
-def run(pdb_file_name, data_file_name, nproc):
-  pdb_code = os.path.basename(pdb_file_name)[:4]
+def get_model(pdb_file_name):
   pdb_inp = iotbx.pdb.input(file_name = pdb_file_name)
+  model = mmtbx.model.manager(
+    model_input       = pdb_inp,
+    build_grm         = False,
+    stop_for_unknowns = False,
+    log               = null_out())
+  hd_sel = model.get_hd_selection()
+  model = model.select(~hd_sel)
+  rr = run_reduce_with_timeout(
+    parameters  = " -quiet -",
+    stdin_lines = model.model_as_pdb())
+  pdb_inp = iotbx.pdb.input(source_info = None, lines = rr.stdout_lines)
   model = mmtbx.model.manager(
     model_input       = pdb_inp,
     build_grm         = True,
     stop_for_unknowns = False,
     log               = null_out())
+  sel = model.selection(string = "element H and not protein")
+  return model.select(~sel)
+
+def run(pdb_file_name, data_file_name, nproc):
+  pdb_code = os.path.basename(pdb_file_name)[:4]
+  model = get_model(pdb_file_name = pdb_file_name)
   crystal_symmetry = model.crystal_symmetry()
   pdb_hierarchy = model.get_hierarchy()
   xray_structure = model.get_xray_structure()
@@ -168,7 +195,7 @@ def run(pdb_file_name, data_file_name, nproc):
     return # SKIP
   unit_cell = crystal_symmetry.unit_cell()
   tfofc = get_map(
-    fmodel=fmodel_ini, resolution_factor=1./4, map_type="2mFo-DFc", scale=True)
+    fmodel=fmodel_ini, map_type="2mFo-DFc", scale=True)
   show(model = model, fmodel = fmodel_ini, prefix = "Start:")
   get_class = iotbx.pdb.common_residue_names_get_class
   atom_seq=[]
@@ -199,12 +226,12 @@ def run(pdb_file_name, data_file_name, nproc):
     crystal_symmetry = crystal_symmetry)
   xray_structure = pdb_hierarchy.extract_xray_structure(
     crystal_symmetry = crystal_symmetry)
-  fmodel = get_fmodel(
-    crystal_symmetry = crystal_symmetry,
-    reflection_files = data_file_name,
-    xray_structure   = xray_structure)
   model.set_sites_cart(sites_cart = xray_structure.sites_cart())
-  show(model = model, fmodel = fmodel, prefix = "Final:")
+  model.idealize_h_riding()
+  fmodel_ini.update_xray_structure(xray_structure = model.get_xray_structure(),
+    update_f_calc=True, update_f_mask=True)
+  fmodel_ini.update_all_scales()
+  show(model = model, fmodel = fmodel_ini, prefix = "Final:")
 
 if __name__ == '__main__':
 #  exercise()
