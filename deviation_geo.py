@@ -215,11 +215,11 @@ class lbfgs(object):
 
   def apply_shifts(self):
     apply_shifts_result = xray.ext.minimization_apply_shifts(
-      unit_cell      = self.xray_structure.unit_cell(),
-      scatterers     = self._scatterers_start,
-      shifts         = self.x)
-    scatterers_shifted = apply_shifts_result.shifted_scatterers
-    self.xray_structure.replace_scatterers(scatterers = scatterers_shifted)
+      unit_cell  = self.xray_structure.unit_cell(),
+      scatterers = self._scatterers_start,
+      shifts     = self.x)
+    self.xray_structure.replace_scatterers(
+      scatterers = apply_shifts_result.shifted_scatterers)
 
   def compute_functional_and_gradients(self):
     self.apply_shifts()
@@ -331,7 +331,7 @@ if __name__ == '__main__':
       if(pdb_file.endswith(".pdb")):
         code = pdb_file[:-4]
         #
-        #if code != "4u9h": continue # For debugging
+        if code != "4ayp": continue # For debugging
         #
         pdb_file = "%s%s.pdb"%(path, code)
         mtz_file = "%s%s.mtz"%(path, code)
@@ -357,13 +357,16 @@ if __name__ == '__main__':
     #steps = [i/100 for i in range(4,10)]+[i/100 for i in range(10,31)]
     for pdb_file, mtz_file, code in zip(pdbs, mtzs, codes):
       print code, "-"*75
-      r = run(pdb_file_name=pdb_file, data_file_name=mtz_file, step=0.125,
-        nproc=50, use_lbfgs=True, use_map_match=True)
-      if(r is None): continue
-      print r.stat_start.string, "%6.4f %6.4f"%(r.d_min, r.cmpl)
-      print r.stat_final.string
-      print r.stat_final2.string
-      sys.stdout.flush()
+      try:
+        r = run(pdb_file_name=pdb_file, data_file_name=mtz_file, step=0.2,
+          nproc=50, use_lbfgs=True, use_map_match=True)
+        if(r is None): continue
+        print r.stat_start.string, "%6.4f %6.4f"%(r.d_min, r.cmpl)
+        print r.stat_final.string
+        print r.stat_final2.string
+        sys.stdout.flush()
+      except Exception, e:
+        print "FAILED:", str(e)
   else:
     run(pdb_file_name="3nir_refine_001.pdb",
         data_file_name="3nir_refine_data.mtz", nproc=90)
