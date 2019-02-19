@@ -8,7 +8,6 @@ from cStringIO import StringIO
 import mmtbx
 import os
 import sys
-import scitbx
 from scitbx.math import superpose
 from libtbx.utils import null_out
 from iotbx.file_reader import any_file
@@ -19,9 +18,11 @@ from libtbx.utils import null_out
 from cctbx import maptbx
 import mmtbx.hydrogens
 from mmtbx.utils import run_reduce_with_timeout
+from libtbx import group_args
 from libtbx import adopt_init_args
 from cctbx import xray
 from phenix.refinement import weight_xray_chem
+import scitbx
 
 #def ccp4_map(cg, file_name, map_data):
 #  from iotbx import mrcfile
@@ -83,7 +84,7 @@ from phenix.refinement import weight_xray_chem
 
 def move_residue_atoms(map_data, atom, crystal_symmetry):
   sites_cart = atom.xyz
-  xyz_best = maptbx.fit_point_3d_grid_search(site_cart=sites_cart, 
+  xyz_best = maptbx.fit_point_3d_grid_search(site_cart=sites_cart,
     map_data=map_data, unit_cell=crystal_symmetry.unit_cell(), amplitude=0.1,
     increment=0.001)
   diff = list(flex.vec3_double([sites_cart])-flex.vec3_double([xyz_best]))[0]
@@ -108,13 +109,14 @@ def get_fmodel(crystal_symmetry, reflection_files, xray_structure):
   f_obs = determine_data_and_flags_result.f_obs
   r_free_flags = determine_data_and_flags_result.r_free_flags
   fmodel = mmtbx.f_model.manager(
+    target_name    = "ls_wunit_k1",
     f_obs          = f_obs,
     r_free_flags   = r_free_flags,
     xray_structure = xray_structure)
   fmodel.update_all_scales()
   return fmodel
 
-def get_map(fmodel, step=0.05, map_type="mFo-DFc", scale=False):
+def get_map(fmodel, step, map_type="mFo-DFc", scale=False):
   f_map = fmodel.electron_density_map().map_coefficients(
     map_type     = map_type,
     isotropize   = True,
@@ -131,7 +133,7 @@ def get_map(fmodel, step=0.05, map_type="mFo-DFc", scale=False):
   return fft_map.real_map_unpadded()
 
 def map_peak_coordinate(args):
-  atom_i_seq,pdb_hierarchy,xray_structure,crystal_symmetry,fmodel_ini = args
+  atom_i_seq,pdb_hierarchy,xray_structure,crystal_symmetry,fmodel_ini,step=args
   atom = pdb_hierarchy.atoms()[atom_i_seq]
   sel_int = flex.size_t([atom.i_seq])
   n_atoms = xray_structure.scatterers().size()
@@ -140,7 +142,7 @@ def map_peak_coordinate(args):
   fmodel = fmodel_ini.deep_copy()
   fmodel.update_xray_structure(xray_structure = xrs_sel,
     update_f_calc=True)
-  map_data = get_map(fmodel = fmodel)
+  map_data = get_map(fmodel = fmodel, step = step)
   shift, xyz_best = move_residue_atoms(
     map_data         = map_data,
     atom             = atom,
@@ -156,8 +158,11 @@ def show(model, fmodel, prefix):
   model_ = model.select(sel)
   r = model_.geometry_statistics(use_hydrogens=False).result()
   f="%s r_work=%6.4f r_free=%6.4f bond: %7.4f angle: %7.3f"
-  print f%(prefix, fmodel.r_work(), fmodel.r_free(), r.bond.mean, r.angle.mean)
-  sys.stdout.flush()
+  rw = fmodel.r_work()
+  rf = fmodel.r_free()
+  string=f%(prefix, rw, rf, r.bond.mean, r.angle.mean)
+  return group_args(string = string, r_work = rw, r_free = rf,
+    bonds = r.bond.mean, angles = r.angle.mean)
 
 def get_model(pdb_file_name):
   pdb_inp = iotbx.pdb.input(file_name = pdb_file_name)
@@ -181,35 +186,33 @@ def get_model(pdb_file_name):
   return model.select(~sel)
 
 class lbfgs(object):
-  def __init__(self, fmodels,
-                     number_of_iterations = 25):
+  def __init__(self, fmodel,
+                     number_of_iterations = 100,
+                     gradient_only = True,
+                     stpmax = 0.25):
     adopt_init_args(self, locals())
-    self.f=None
-    self.xray_structure = self.fmodels.fmodel_xray().xray_structure
+    self.gradient_only = gradient_only
+    self.xray_structure = self.fmodel.xray_structure
     self.correct_special_position_tolerance = 1.0
     self.x = flex.double(self.xray_structure.n_parameters(), 0)
     self._scatterers_start = self.xray_structure.scatterers()
-    self.weights = weight_xray_chem.weights(wx       = 1,
-                                            wx_scale = 1,
-                                            angle_x  = None,
-                                            wn       = 1,
-                                            wn_scale = 1,
-                                            angle_n  = None,
-                                            w        = 0,
-                                            wxn      = 1)
+    self.target_functor = self.fmodel.target_functor()
+    lbfgs_core_params = scitbx.lbfgs.core_parameters(
+      stpmin = 1.e-9,
+      stpmax = stpmax)
     lbfgs_termination_params = scitbx.lbfgs.termination_parameters(
       max_iterations = number_of_iterations)
     self.minimizer = scitbx.lbfgs.run(
       target_evaluator          = self,
+      gradient_only             = gradient_only,
+      line_search               = True,
+      core_params               = lbfgs_core_params,
       termination_params        = lbfgs_termination_params,
       use_fortran               = False,
       exception_handling_params = scitbx.lbfgs.exception_handling_parameters(
-                         ignore_line_search_failed_step_at_lower_bound = True))
+        ignore_line_search_failed_step_at_lower_bound = True))
     self.apply_shifts()
-    del self._scatterers_start
-    self.compute_target(compute_gradients = False,u_iso_refinable_params = None)
-    self.fmodels.create_target_functors()
-  
+
   def apply_shifts(self):
     apply_shifts_result = xray.ext.minimization_apply_shifts(
       unit_cell      = self.xray_structure.unit_cell(),
@@ -217,28 +220,22 @@ class lbfgs(object):
       shifts         = self.x)
     scatterers_shifted = apply_shifts_result.shifted_scatterers
     self.xray_structure.replace_scatterers(scatterers = scatterers_shifted)
-    
-  def compute_target(self, compute_gradients, u_iso_refinable_params):
-    self.stereochemistry_residuals = None
-    self.fmodels.update_xray_structure(
+
+  def compute_functional_and_gradients(self):
+    self.apply_shifts()
+    self.fmodel.update_xray_structure(
       xray_structure = self.xray_structure,
       update_f_calc  = True)
-    fmodels_target_and_gradients = self.fmodels.target_and_gradients(
-      weights                = self.weights,
-      compute_gradients      = compute_gradients,
-      u_iso_refinable_params = u_iso_refinable_params)
-    self.f = fmodels_target_and_gradients.target()
-    self.g = fmodels_target_and_gradients.gradients()
-  
-  def compute_functional_and_gradients(self):
-    u_iso_refinable_params = self.apply_shifts()
-    self.compute_target(compute_gradients     = True,
-                        u_iso_refinable_params = u_iso_refinable_params)
+    tg = self.target_functor(compute_gradients=True)
+    self.f = tg.target_work() # not really used if gradient_only=True
+    self.g = tg.gradients_wrt_atomic_parameters().packed()
     return self.f, self.g
 
-def run(pdb_file_name, data_file_name, nproc, method="lbfgs"):
+def run(pdb_file_name, data_file_name, step, nproc, use_lbfgs=True,
+        use_map_match=True):
   pdb_code = os.path.basename(pdb_file_name)[:4]
   model = get_model(pdb_file_name = pdb_file_name)
+  model.idealize_h_riding()
   crystal_symmetry = model.crystal_symmetry()
   pdb_hierarchy = model.get_hierarchy()
   xray_structure = model.get_xray_structure()
@@ -246,25 +243,14 @@ def run(pdb_file_name, data_file_name, nproc, method="lbfgs"):
     crystal_symmetry = crystal_symmetry,
     reflection_files = data_file_name,
     xray_structure   = xray_structure)
-  cmpl = fmodel_ini.f_obs().completeness()
-  #if(cmpl<0.9):
-  #  print "Low completeness:", cmpl
-  #  return # SKIP
   if(fmodel_ini.r_work()*100.>20):
     print "  skip: too large starting Rwork, inputs must be bad."
     return # SKIP
-  show(model = model, fmodel = fmodel_ini, prefix = "Start:")
-  if method == "lbfgs":
-    fmodel_ini.xray_structure.scatterers().flags_set_grad_site(
-      iselection = xray_structure.all_selection().iselection())
-    fmodels = mmtbx.fmodels(fmodel_xray = fmodel_ini)
-    minimized = lbfgs(fmodels = fmodels)
-    pdb_hierarchy.adopt_xray_structure(minimized.xray_structure)
-    
-  elif method == "map-match":
-    unit_cell = crystal_symmetry.unit_cell()
-    tfofc = get_map(
-      fmodel=fmodel_ini,  map_type="2mFo-DFc", scale=True)
+  unit_cell = crystal_symmetry.unit_cell()
+  tfofc = get_map(
+    fmodel=fmodel_ini, step=0.2, map_type="2mFo-DFc", scale=True)
+  stat_start = show(model = model, fmodel = fmodel_ini, prefix = "Start:  ")
+  if(use_map_match):
     get_class = iotbx.pdb.common_residue_names_get_class
     atom_seq=[]
     for model_ in pdb_hierarchy.models():
@@ -280,7 +266,7 @@ def run(pdb_file_name, data_file_name, nproc, method="lbfgs"):
                 if(map_at_center<1.0): continue
                 atom_seq.append(atom.i_seq)
     args = [(atom_seq[i], pdb_hierarchy, xray_structure, crystal_symmetry,
-      fmodel_ini) for i in range(len(atom_seq))]
+      fmodel_ini,step) for i in range(len(atom_seq))]
     results = pool_map(
       func      = map_peak_coordinate,
       iterable  = args,
@@ -289,22 +275,53 @@ def run(pdb_file_name, data_file_name, nproc, method="lbfgs"):
     select = flex.size_t([i for i in atom_seq])
     site_cart_shifted = flex.vec3_double(results)
     site_cart_new = site_carts.set_selected(select,site_cart_shifted)
-    pdb_hierarchy.atoms().set_xyz(site_cart_new)
-
-  xray_structure = pdb_hierarchy.extract_xray_structure(
-    crystal_symmetry = crystal_symmetry)
-  model.set_sites_cart(sites_cart = xray_structure.sites_cart())
-  model.idealize_h_riding()
-  fmodel_ini.update_xray_structure(xray_structure = model.get_xray_structure(),
-    update_f_calc=True, update_f_mask=True)
-  fmodel_ini.update_all_scales() 
-  pdb_hierarchy.write_pdb_file(file_name="%s_updated.pdb"%pdb_code,
-      crystal_symmetry = crystal_symmetry)
-  show(model = model, fmodel = fmodel_ini, prefix = "Final:")
+    model.set_sites_cart(sites_cart = site_cart_new)
+    model.idealize_h_riding()
+    fmodel_ini.update_xray_structure(
+      xray_structure = model.get_xray_structure(),
+      update_f_calc  = True,
+      update_f_mask  = True)
+    fmodel_ini.update_all_scales()
+    stat_final = show(model = model, fmodel = fmodel_ini, prefix = "Final 1:")
+  if(use_lbfgs):
+    fmodel_ini.xray_structure.scatterers().flags_set_grad_site(
+      iselection = xray_structure.all_selection().iselection())
+    for cycle in xrange(10):
+      if(cycle%2==0): fmodel_ini.set_target_name(target_name="ml")
+      else:           fmodel_ini.set_target_name(target_name="ls")
+      minimized = lbfgs(fmodel = fmodel_ini)
+      model.set_sites_cart(sites_cart = minimized.xray_structure.sites_cart())
+      model.idealize_h_riding()
+    fmodel_ini.update_xray_structure(
+      xray_structure = model.get_xray_structure(),
+      update_f_calc  = True,
+      update_f_mask  = True)
+    fmodel_ini.update_all_scales()
+  stat_final2 = show(model = model, fmodel = fmodel_ini, prefix = "Final 2:")
+  # Write output model
+  fo = fmodel_ini.f_obs()
+  d_min = fo.d_min()
+  cmpl  = fo.completeness()
+  dtpr_h = fo.data().size()/(model.size()*3)
+  dtpr   = fo.data().size()/(model.select(~model.get_hd_selection()).size()*3)
+  of = open("%s_refined.pdb"%code, "w")
+  print >> of, "REMARK %s"%stat_start.string
+  print >> of, "REMARK %s"%stat_final.string
+  print >> of, "REMARK %s"%stat_final2.string
+  print >> of, "REMARK d_min = %6.4f completeness = %6.4f"%(d_min, cmpl)
+  print >> of, "REMARK dtpr(H) = %3.1f dtpr(no H) = %3.1f"%(dtpr_h, dtpr)
+  print >> of, model.model_as_pdb()
+  #
+  return group_args(
+    d_min       = d_min,
+    cmpl        = cmpl,
+    stat_start  = stat_start,
+    stat_final  = stat_final,
+    stat_final2 = stat_final2)
 
 if __name__ == '__main__':
 #  exercise()
-  if 0:
+  if 1:
     path = "/net/anaconda/raid1/afonine/work/high_res_survey/high_res_pdb_mtz/"
     pdbs  = flex.std_string()
     mtzs  = flex.std_string()
@@ -314,7 +331,7 @@ if __name__ == '__main__':
       if(pdb_file.endswith(".pdb")):
         code = pdb_file[:-4]
         #
-        #if code != "1etm": continue # For debugging
+        #if code != "4u9h": continue # For debugging
         #
         pdb_file = "%s%s.pdb"%(path, code)
         mtz_file = "%s%s.mtz"%(path, code)
@@ -337,9 +354,16 @@ if __name__ == '__main__':
     mtzs  = mtzs .select(sel)
     codes = codes.select(sel)
     sizes = sizes.select(sel)
+    #steps = [i/100 for i in range(4,10)]+[i/100 for i in range(10,31)]
     for pdb_file, mtz_file, code in zip(pdbs, mtzs, codes):
       print code, "-"*75
-      run(pdb_file_name=pdb_file, data_file_name=mtz_file, nproc=50)
+      r = run(pdb_file_name=pdb_file, data_file_name=mtz_file, step=0.125,
+        nproc=50, use_lbfgs=True, use_map_match=True)
+      if(r is None): continue
+      print r.stat_start.string, "%6.4f %6.4f"%(r.d_min, r.cmpl)
+      print r.stat_final.string
+      print r.stat_final2.string
+      sys.stdout.flush()
   else:
-    run(pdb_file_name="1akg.pdb",
-        data_file_name="1akg.mtz", nproc=8, method="map-match")
+    run(pdb_file_name="3nir_refine_001.pdb",
+        data_file_name="3nir_refine_data.mtz", nproc=90)
