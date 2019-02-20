@@ -109,7 +109,6 @@ def get_fmodel(crystal_symmetry, reflection_files, xray_structure):
   f_obs = determine_data_and_flags_result.f_obs
   r_free_flags = determine_data_and_flags_result.r_free_flags
   fmodel = mmtbx.f_model.manager(
-    target_name    = "ls_wunit_k1",
     f_obs          = f_obs,
     r_free_flags   = r_free_flags,
     xray_structure = xray_structure)
@@ -147,10 +146,13 @@ def map_peak_coordinate(args):
     map_data         = map_data,
     atom             = atom,
     crystal_symmetry = crystal_symmetry)
-  if 0 and (shift.split()[0].strip() in ["0.100","-0.100"] or
-            shift.split()[1].strip() in ["0.100","-0.100"] or
-            shift.split()[2].strip() in ["0.100","-0.100"]):
-    print "r_work=%6.4f r_free=%6.4f"%(fmodel.r_work(), fmodel.r_free()), shift
+  # Debugging code
+  #x = float(shift.split()[0].strip())
+  #y = float(shift.split()[1].strip())
+  #z = float(shift.split()[2].strip())
+  #if(abs(x)<1.e-4 and abs(y)<1.e-4 and abs(z)<1.e-4):
+  #  print "r_work=%6.4f r_free=%6.4f"%(fmodel.r_work(), fmodel.r_free()), \
+  #    shift, atom_i_seq, atom.name
   return xyz_best
 
 def show(model, fmodel, prefix):
@@ -189,7 +191,7 @@ class lbfgs(object):
   def __init__(self, fmodel,
                      number_of_iterations = 100,
                      gradient_only = True,
-                     stpmax = 0.25):
+                     stpmax = 0.1):
     adopt_init_args(self, locals())
     self.gradient_only = gradient_only
     self.xray_structure = self.fmodel.xray_structure
@@ -236,6 +238,7 @@ def run(pdb_file_name, data_file_name, step, nproc, use_lbfgs=True,
   pdb_code = os.path.basename(pdb_file_name)[:4]
   model = get_model(pdb_file_name = pdb_file_name)
   model.idealize_h_riding()
+  hd_selection = model.get_hd_selection()
   crystal_symmetry = model.crystal_symmetry()
   pdb_hierarchy = model.get_hierarchy()
   xray_structure = model.get_xray_structure()
@@ -272,9 +275,17 @@ def run(pdb_file_name, data_file_name, step, nproc, use_lbfgs=True,
       iterable  = args,
       processes = nproc)
     site_carts = flex.vec3_double(pdb_hierarchy.atoms().extract_xyz())
+    site_carts_dc = site_carts.deep_copy()
     select = flex.size_t([i for i in atom_seq])
     site_cart_shifted = flex.vec3_double(results)
     site_cart_new = site_carts.set_selected(select,site_cart_shifted)
+    #
+    dist = flex.sqrt((site_cart_new - site_carts_dc).dot())
+    sel_moving = flex.bool(site_carts.size(), True)
+    for i,d in enumerate(dist):
+      if(d<1.e-4):
+        sel_moving[i]=False
+    #
     model.set_sites_cart(sites_cart = site_cart_new)
     model.idealize_h_riding()
     fmodel_ini.update_xray_structure(
@@ -284,11 +295,10 @@ def run(pdb_file_name, data_file_name, step, nproc, use_lbfgs=True,
     fmodel_ini.update_all_scales()
     stat_final = show(model = model, fmodel = fmodel_ini, prefix = "Final 1:")
   if(use_lbfgs):
+    fmodel_ini.set_target_name(target_name="ml")
     fmodel_ini.xray_structure.scatterers().flags_set_grad_site(
-      iselection = xray_structure.all_selection().iselection())
+      iselection = sel_moving.iselection())
     for cycle in xrange(10):
-      if(cycle%2==0): fmodel_ini.set_target_name(target_name="ml")
-      else:           fmodel_ini.set_target_name(target_name="ls")
       minimized = lbfgs(fmodel = fmodel_ini)
       model.set_sites_cart(sites_cart = minimized.xray_structure.sites_cart())
       model.idealize_h_riding()
@@ -303,7 +313,7 @@ def run(pdb_file_name, data_file_name, step, nproc, use_lbfgs=True,
   d_min = fo.d_min()
   cmpl  = fo.completeness()
   dtpr_h = fo.data().size()/(model.size()*3)
-  dtpr   = fo.data().size()/(model.select(~model.get_hd_selection()).size()*3)
+  dtpr   = fo.data().size()/(model.select(~hd_selection).size()*3)
   of = open("%s_refined.pdb"%code, "w")
   print >> of, "REMARK %s"%stat_start.string
   print >> of, "REMARK %s"%stat_final.string
@@ -311,6 +321,11 @@ def run(pdb_file_name, data_file_name, step, nproc, use_lbfgs=True,
   print >> of, "REMARK d_min = %6.4f completeness = %6.4f"%(d_min, cmpl)
   print >> of, "REMARK dtpr(H) = %3.1f dtpr(no H) = %3.1f"%(dtpr_h, dtpr)
   print >> of, model.model_as_pdb()
+  of.close()
+  # Trimmed model
+  of = open("%s_refined_trimmed.pdb"%code, "w")
+  print >> of, model.select(sel_moving).model_as_pdb()
+  of.close()
   #
   return group_args(
     d_min       = d_min,
@@ -331,7 +346,7 @@ if __name__ == '__main__':
       if(pdb_file.endswith(".pdb")):
         code = pdb_file[:-4]
         #
-        if code != "4ayp": continue # For debugging
+        #if code != "2fma": continue # For debugging
         #
         pdb_file = "%s%s.pdb"%(path, code)
         mtz_file = "%s%s.mtz"%(path, code)
