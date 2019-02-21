@@ -20,19 +20,8 @@ def get_model(pdb_file_name,selection):
   sel = model.selection(string = selection)
   return model.select(sel) 
 
-def run(pdb_file_name):
-  pdb_code = os.path.basename(pdb_file_name)[:4]
-  resname = "ARG"
-  atom_name = ["CZ", "NE", "NH1", "NH2", "CD"]
-  selection = "resname " + resname + " and name " + " or name ".join(i for i in atom_name)
-  print selection
-  model = get_model(pdb_file_name = pdb_file_name, selection = selection)
-  pdb_hierarchy = model.get_hierarchy()
-  pdb_hierarchy.write_pdb_file(file_name = "test.pdb")
-  grm = model.get_restraints_manager().geometry
-  sites_cart = pdb_hierarchy.atoms().extract_xyz()
-  atoms = pdb_hierarchy.atoms()
-  for proxy in grm.angle_proxies:
+def angle_analyze(restraints_manager, atoms, sites_cart):
+  for proxy in restraints_manager.angle_proxies:
     angle_proxy = proxy.i_seqs
     atom0 = atoms[angle_proxy[0]]
     atom1 = atoms[angle_proxy[1]]
@@ -41,7 +30,9 @@ def run(pdb_file_name):
       sites_cart = sites_cart,
       proxy      = proxy)
     print "%s-%s-%s angle:"%(atom0.name,atom1.name,atom2.name),angle.angle_model
-  for proxy in grm.dihedral_proxies:
+
+def dihedral_analyze(restraints_manager, atoms, sites_cart):
+  for proxy in restraints_manager.dihedral_proxies:
     dihedral_proxy = proxy.i_seqs
     atom0 = atoms[dihedral_proxy[0]]
     atom1 = atoms[dihedral_proxy[1]]
@@ -49,11 +40,31 @@ def run(pdb_file_name):
     atom3 = atoms[dihedral_proxy[3]]
     dihedral = geometry_restraints.dihedral(
       sites_cart = sites_cart,
-      proxy = proxy)
-    print "%s-%s-%s-%s dihedral:"%(atom0.name,atom1.name,atom2.name,atom3.name),dihedral.angle_model
+      proxy      = proxy)
+    print "%s-%s-%s-%s dihedral:"%(atom0.name,atom1.name,atom2.name,\
+      atom3.name),dihedral.angle_model
+
+def run(pdb_file_name, selection):
+  model = get_model(pdb_file_name = pdb_file_name, selection = selection)
+  pdb_hierarchy = model.get_hierarchy()
+  grm = model.get_restraints_manager().geometry
+  sites_cart = pdb_hierarchy.atoms().extract_xyz()
+  atoms = pdb_hierarchy.atoms()
+  angle_analyze(
+    restraints_manager = grm, 
+    atoms              = atoms, 
+    sites_cart         = sites_cart)
+  dihedral_analyze(
+    restraints_manager = grm, 
+    atoms              = atoms,
+    sites_cart         = sites_cart)
 
 if __name__ == '__main__':
 #  exercise()
+  resname = "ARG"
+  atom_name = ["CZ", "NE", "NH1", "NH2", "CD"]
+  selection = "resname " + resname +\
+    " and name " + " or name ".join(i for i in atom_name)
   if 0:
     path = "/net/anaconda/raid1/afonine/work/high_res_survey/high_res_pdb_mtz/"
     for pdb_file in os.listdir(path):
@@ -64,11 +75,7 @@ if __name__ == '__main__':
         #
         pdb_file = "%s%s.pdb"%(path, code)
         assert os.path.isfile(pdb_file)
-        pdb_file_result = "%s_analyze.pdb"%code
-        if(os.path.isfile(pdb_file_result)):
-          print "SKIP (already processed):", pdb_file_result
-          continue # Skip already done case
         print code, "-"*75
-        run(pdb_file_name=pdb_file)
+        run(pdb_file_name=pdb_file, selection=selection)
   else:
-    run(pdb_file_name="1l37.pdb")
+    run(pdb_file_name="1l37.pdb", selection=selection)
