@@ -108,7 +108,7 @@ def add_hydrogens_using_ReadySet(pdb_hierarchy):
 
 def run(file_name, 
         d_min=0.9, 
-        maxnum_residues_in_cluster=5, 
+        maxnum_residues_in_cluster=3, 
         filter_non_protein=True):
   prefix = os.path.basename(file_name)[:4]
   print file_name, prefix
@@ -126,6 +126,9 @@ def run(file_name,
       if(pdb_hierarchy is not None):
         if(have_conformers(pdb_hierarchy=pdb_hierarchy)):
           pdb_hierarchy.remove_alt_confs(always_keep_one_conformer=True)
+        # Remove ori H, using ReasySet add H
+        hd_selection = pdb_hierarchy.atom_selection_cache().selection("element H")
+        pdb_hierarchy = pdb_hierarchy.select(~hd_selection)
         pdb_hierarchy = add_hydrogens_using_ReadySet(
           pdb_hierarchy=pdb_hierarchy)
         box = box_pdb(pdb_hierarchy = pdb_hierarchy)
