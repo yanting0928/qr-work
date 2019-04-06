@@ -1,7 +1,6 @@
 import os
 from libtbx import easy_run
 import iotbx.pdb
-from iotbx.pdb import remark_2_interpretation
 import mmtbx.model
 from cctbx import uctbx
 import libtbx
