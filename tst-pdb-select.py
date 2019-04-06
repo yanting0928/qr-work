@@ -16,21 +16,41 @@ from mmtbx.monomer_library import idealized_aa
 from mmtbx.rotamer import rotamer_eval
 from scitbx.array_family import flex
 from libtbx import group_args
+from mmtbx import model
+from libtbx.utils import null_out
 
 qrefine = libtbx.env.find_in_repositories("qrefine")
 mon_lib_server = server.server()
 
+aa_codes = [
+"resname ALA",
+"resname ARG",
+"resname ASN",
+"resname ASP",
+"resname CYS",
+"resname GLN",
+"resname GLU",
+"resname GLY",
+"resname HIS",
+"resname ILE",
+"resname LEU",
+"resname LYS",
+"resname MET",
+"resname MSE",
+"resname PHE",
+"resname PRO",
+"resname SER",
+"resname THR",
+"resname TRP",
+"resname TYR",
+"resname VAL"
+]
+
 def keep_protein_only(pdb_hierarchy):
-  selection = flex.size_t()
-  get_class = iotbx.pdb.common_residue_names_get_class
-  for model in pdb_hierarchy.models():
-    for chain in model.chains():
-      for rg in chain.residue_groups():
-        for ag in rg.atom_groups():
-          if(get_class(ag.resname) == "common_amino_acid"):
-            selection.extend(ag.atoms().extract_i_seq())
-  if(selection.size()==0): return None
-  else:                    return pdb_hierarchy.select(selection)
+  asc = pdb_hierarchy.atom_selection_cache()
+  ss = " or ".join(aa_codes)
+  ss = "(%s) and not (element H or element D)"%ss
+  return pdb_hierarchy.select(asc.selection(ss))
 
 def have_conformers(pdb_hierarchy):
   for model in pdb_hierarchy.models():
@@ -105,10 +125,33 @@ def add_hydrogens_using_ReadySet(pdb_hierarchy):
     )
   return rc['model_hierarchy']
 
-def run(file_name, 
-        d_min=0.9, 
-        maxnum_residues_in_cluster=3, 
-        filter_non_protein=True):
+def validate(pdb_str, threshold_bonds=0.02*4, threshold_angles=2.5*4):
+  pdb_inp = iotbx.pdb.input(source_info = None, lines = pdb_str)
+  params = mmtbx.model.manager.get_default_pdb_interpretation_params()
+  params.pdb_interpretation.use_neutron_distances = True
+  params.pdb_interpretation.restraints_library.cdl = False
+  model = mmtbx.model.manager(
+    model_input               = pdb_inp,
+    build_grm                 = True,
+    stop_for_unknowns         = True,#False,
+    pdb_interpretation_params = params,
+    log                       = null_out())
+  grm = model.get_restraints_manager().geometry
+  sites_cart = model.get_sites_cart()
+  delta_list = []
+  b_deltas = flex.abs(
+    grm.get_all_bond_proxies()[0].deltas(sites_cart=sites_cart))
+  b_outl = b_deltas.select(b_deltas>threshold_bonds)
+  if(b_outl.size()>0): return None
+  a_deltas = flex.abs(grm.get_all_angle_proxies().deltas(sites_cart=sites_cart))
+  a_outl = a_deltas.select(a_deltas>threshold_angles)
+  if(a_outl.size()>0): return None
+  return pdb_str
+
+def run(file_name,
+        d_min=0.8,
+        maxnum_residues_in_cluster=3,
+        filter_non_protein_and_hd=True):
   prefix = os.path.basename(file_name)[:4]
   print file_name, prefix
   pdb_inp = iotbx.pdb.input(file_name = file_name)
@@ -120,14 +163,11 @@ def run(file_name,
       xray_structure = pdb_hierarchy.extract_xray_structure()
       xray_structure.convert_to_isotropic()
       pdb_hierarchy.adopt_xray_structure(xray_structure)
-      if(filter_non_protein):
+      if(filter_non_protein_and_hd):
         pdb_hierarchy = keep_protein_only(pdb_hierarchy = pdb_hierarchy)
       if(pdb_hierarchy is not None):
         if(have_conformers(pdb_hierarchy=pdb_hierarchy)):
           pdb_hierarchy.remove_alt_confs(always_keep_one_conformer=True)
-        # Remove ori H, using ReasySet add H
-        hd_selection = pdb_hierarchy.atom_selection_cache().selection("element H")
-        pdb_hierarchy = pdb_hierarchy.select(~hd_selection)
         pdb_hierarchy = add_hydrogens_using_ReadySet(
           pdb_hierarchy=pdb_hierarchy)
         box = box_pdb(pdb_hierarchy = pdb_hierarchy)
@@ -153,6 +193,8 @@ def run(file_name,
                 model_completion = False)
               pdb_str = ph_i.as_pdb_string(
                 crystal_symmetry = box.cs, append_end=True)
+              pdb_str = validate(pdb_str = pdb_str)
+              if(pdb_str is None): continue
               charge = charges_class(raw_records = pdb_str).get_total_charge()
               fo.write("REMARK charge= %s \n"%str(charge))
               fo.write(pdb_str)
@@ -162,4 +204,5 @@ def run(file_name,
         libtbx.easy_run.fully_buffered("rm -rf *.pdb ase/")
 
 if __name__ == '__main__':
-  result = run(file_name = "/home/yanting/QR/ANI/qr-work/4oy5.pdb")
+  result = run(file_name = "/Users/pafonine/tmp37/qr-work/1yjp.pdb")
+  print result
