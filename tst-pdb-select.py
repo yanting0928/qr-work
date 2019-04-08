@@ -50,7 +50,9 @@ def keep_protein_only(pdb_hierarchy):
   asc = pdb_hierarchy.atom_selection_cache()
   ss = " or ".join(aa_codes)
   ss = "(%s) and not (element H or element D)"%ss
-  return pdb_hierarchy.select(asc.selection(ss))
+  selection = asc.selection(ss)
+  if (selection.size() == pdb_hierarchy.atoms_size()): return None
+  else: return pdb_hierarchy.select(selection)
 
 def have_conformers(pdb_hierarchy):
   for model in pdb_hierarchy.models():
@@ -138,7 +140,6 @@ def validate(pdb_str, threshold_bonds=0.02*4, threshold_angles=2.5*4):
     log                       = null_out())
   grm = model.get_restraints_manager().geometry
   sites_cart = model.get_sites_cart()
-  delta_list = []
   b_deltas = flex.abs(
     grm.get_all_bond_proxies()[0].deltas(sites_cart=sites_cart))
   b_outl = b_deltas.select(b_deltas>threshold_bonds)
@@ -204,5 +205,5 @@ def run(file_name,
         libtbx.easy_run.fully_buffered("rm -rf *.pdb ase/")
 
 if __name__ == '__main__':
-  result = run(file_name = "/Users/pafonine/tmp37/qr-work/1yjp.pdb")
+  result = run(file_name = "/home/yanting/qr-work/5yce.pdb")
   print result
