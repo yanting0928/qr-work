@@ -50,9 +50,9 @@ def keep_protein_only(pdb_hierarchy):
   asc = pdb_hierarchy.atom_selection_cache()
   ss = " or ".join(aa_codes)
   ss = "(%s) and not (element H or element D)"%ss
-  selection = asc.selection(ss)
-  if (selection.size() == pdb_hierarchy.atoms_size()): return None
-  else: return pdb_hierarchy.select(selection)
+  pdb_hierarchy =  pdb_hierarchy.select(asc.selection(ss))
+  if pdb_hierarchy.atoms_size() == 0: return None
+  else                              : return pdb_hierarchy                             
 
 def have_conformers(pdb_hierarchy):
   for model in pdb_hierarchy.models():
@@ -153,7 +153,7 @@ def run(file_name,
         d_min=0.8,
         maxnum_residues_in_cluster=3,
         filter_non_protein_and_hd=True):
-  prefix = os.path.basename(file_name)[:4]
+  prefix = os.path.basename(file_name)[3:7]
   print file_name, prefix
   pdb_inp = iotbx.pdb.input(file_name = file_name)
   resolution = pdb_inp.resolution()
@@ -205,5 +205,8 @@ def run(file_name,
         libtbx.easy_run.fully_buffered("rm -rf *.pdb ase/")
 
 if __name__ == '__main__':
-  result = run(file_name = "/home/yanting/qr-work/5yce.pdb")
-  print result
+  if 1:
+    result = run(file_name = "/home/yanting/qr-work/5nfm.pdb")
+    print result
+  else:
+    result = run(file_name = "/home/pdb/pdb/p4/pdb3p4j.ent.gz")
