@@ -203,10 +203,13 @@ def run(file_name,
               cntr+=1
               libtbx.easy_run.fully_buffered("mv %s %s"%(cl_fn, prefix))
         libtbx.easy_run.fully_buffered("rm -rf *.pdb ase/")
+  if not os.listdir(prefix):
+    os.rmdir(prefix)
+    print "Empty dir"
+
 
 if __name__ == '__main__':
   if 1:
-    result = run(file_name = "/home/yanting/qr-work/5nfm.pdb")
-    print result
+    result = run(file_name = "/home/yanting/qr-work/2ygj.pdb")
   else:
-    result = run(file_name = "/home/pdb/pdb/p4/pdb3p4j.ent.gz")
+    result = run(file_name = "/home/pdb/pdb/g1/pdb4g13.ent.gz")
