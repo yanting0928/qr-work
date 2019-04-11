@@ -52,7 +52,7 @@ def keep_protein_only(pdb_hierarchy):
   ss = "(%s) and not (element H or element D)"%ss
   pdb_hierarchy =  pdb_hierarchy.select(asc.selection(ss))
   if pdb_hierarchy.atoms_size() == 0: return None
-  else                              : return pdb_hierarchy                             
+  else                              : return pdb_hierarchy
 
 def have_conformers(pdb_hierarchy):
   for model in pdb_hierarchy.models():
