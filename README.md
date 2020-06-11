@@ -10,7 +10,7 @@
    Note: any fragment contain missing atoms amino acid will be discard
 
 7. add capping H
-8. validate each fragment
+8. Verify that each fragment is reasonable(by bond rmsd, angle rmsd)
 9. calculate charge
 10. write out PDB file with fragment and charge in its REMARK
 
